@@ -17,9 +17,9 @@ ActiveRecord::Schema.define(version: 2022_04_28_002808) do
 
   create_table "users", primary_key: "address", id: :string, force: :cascade do |t|
     t.datetime "last_seen"
-    t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.string "ens"
+    t.datetime "created_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.index ["address"], name: "index_users_on_address", unique: true
   end
 

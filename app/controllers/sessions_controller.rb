@@ -3,9 +3,30 @@ require 'json'
 
 class SessionsController < ApplicationController
 	# protect_from_forgery with: :null_session
+	skip_before_action :auth_current_user, except: %i[profile sign_out]
 
 	def index
 		render 'index'
+	end
+
+	#creates message with nonce for user to sign
+	def message
+		nonce = Siwe::Util.generate_nonce
+		message =
+			Siwe::Message.new(
+				request.host_with_port,
+				params[:address],
+				"#{request.protocol}#{request.host_with_port}",
+				'1',
+				{
+					statement: 'SIWE Investigate',
+					nonce: nonce,
+					chain_id: params[:chainId],
+				},
+			)
+
+		session[:message] = message.to_json_string
+		render json: message
 	end
 
 	def sign_in
@@ -17,7 +38,9 @@ class SessionsController < ApplicationController
 			session[:address] = message.address
 
 			last_seen = DateTime.now
-			User.upsert({ address: message.address, last_seen: last_seen })
+			User.upsert(
+				{ address: message.address, last_seen: last_seen, ens: session[:ens] },
+			)
 
 			render json: {
 					ens: session[:ens],
@@ -30,43 +53,23 @@ class SessionsController < ApplicationController
 	end
 
 	def profile
-		if current_user
-			current_user.seen
-			current_user.save
+		if @current_user
+			@current_user.seen
+			@current_user.save
 			render json: {
 					ens: session[:ens],
 					address: session[:address],
-					lastSeen: current_user.last_seen,
+					lastSeen: @current_user.last_seen,
 			       }
 		else
 			head :no_content
 		end
 	end
 
-	def message
-		nonce = Siwe::Util.generate_nonce
-		message =
-			Siwe::Message.new(
-				request.host_with_port,
-				params[:address],
-				"#{request.protocol}#{request.host_with_port}",
-				'1',
-				{
-					statement: 'SIWE Rails Example',
-					nonce: nonce,
-					chain_id: params[:chainId],
-				},
-			)
-
-		session[:message] = message.to_json_string
-
-		render plain: message.prepare_message
-	end
-
 	def sign_out
-		if current_user
-			current_user.seen
-			current_user.save
+		if @current_user
+			@current_user.seen
+			@current_user.save
 			session[:ens] = nil
 			session[:address] = nil
 			head :no_content

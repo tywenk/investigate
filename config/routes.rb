@@ -1,12 +1,11 @@
 Rails.application.routes.draw do
-	resources :users
 	root 'sessions#index'
 
-	get 'profile' => 'sessions#profile', :as => 'profile'
-	get 'message' => 'sessions#message', :as => 'message'
-
-	post 'sign-in' => 'sessions#sign_in', :as => 'sign-in'
-	post 'sign-out' => 'sessions#sign_out', :as => 'sign-out'
+	get '/profile', to: 'sessions#profile'
+	post '/message', to: 'sessions#message'
+	post '/sign-in', to: 'sessions#sign_in'
+	post '/sign-out', to: 'sessions#sign_out'
+	get '/autologin', to: 'sessions#profile'
 
 	resources :users
 	resources :sessions
