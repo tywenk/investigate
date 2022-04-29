@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
-const StartInputForm = ({ setVal, endpoint }) => {
+const StartInputForm = ({ endpoint, route }) => {
 	const [formContent, setFormContent] = useState("")
 	const [submitContent, setSubmitContent] = useState({})
 	const [formType, setFormType] = useState("")
+	let navigate = useNavigate()
 
 	useEffect(() => {
 		switch (endpoint) {
@@ -37,7 +39,7 @@ const StartInputForm = ({ setVal, endpoint }) => {
 		})
 
 		const data = await res.json()
-		setVal(data.block_num)
+		navigate(`/${route}/${data.block_num}/edit`)
 	}
 	return (
 		<div>

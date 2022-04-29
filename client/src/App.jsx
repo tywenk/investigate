@@ -5,6 +5,7 @@ import NavBar from "./pages/NavBar"
 import UserProfile from "./pages/UserProfile"
 import UserInvestigations from "./pages/UserInvestigations"
 import InvestigationLayout from "./pages/InvestigationLayout"
+import Block from "./pages/Block"
 import BlockEdit from "./pages/BlockEdit"
 import BlockShow from "./pages/BlockShow"
 import { UserProvider } from "./context/UserContext"
@@ -32,9 +33,13 @@ const App = () => {
 								path='investigations'
 								element={<InvestigationLayout />}
 							></Route>
-							<Route path='block' element={<BlockEdit />}></Route>
+							<Route path='block' element={<Block />}></Route>
 							<Route path='block/:id' element={<BlockShow />}></Route>
 							<Route path='block/:id/edit' element={<BlockEdit />}></Route>
+							<Route
+								path='block/:id/:narrative'
+								element={<BlockEdit />}
+							></Route>
 							{/* <Route path='transaction' element={<TransactionEdit />}></Route>
 						<Route path='transaction/:id' element={<TransactionShow />}></Route>
 						<Route
