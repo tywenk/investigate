@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+	has_many :investigations
+
 	self.primary_key = 'address'
 
 	def seen

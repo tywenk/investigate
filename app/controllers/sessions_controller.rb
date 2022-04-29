@@ -29,6 +29,7 @@ class SessionsController < ApplicationController
 		render json: message
 	end
 
+	#validates signature and returns user info
 	def sign_in
 		message = Siwe::Message.from_json_string session[:message]
 

@@ -89,14 +89,14 @@ const NavBar = () => {
 	}
 
 	return (
-		<div className='flex flex-row bg-yellow-200'>
+		<div className='flex flex-row gap-x-2 bg-yellow-200'>
 			<div>
 				{!currentUser?.address ? (
 					<>
 						<button onClick={connectWallet}>Connect</button>
 					</>
 				) : (
-					<div className='flex flex-row'>
+					<div>
 						<button onClick={signOut}>Sign Out</button>
 						<Link to='profile' className='truncate w-20'>
 							{currentUser.ens || currentUser.address}
