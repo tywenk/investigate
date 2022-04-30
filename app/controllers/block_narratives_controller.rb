@@ -3,7 +3,16 @@ class BlockNarrativesController < ApplicationController
 		render json: BlockNarrative.all
 	end
 
-	def create; end
+	def create
+		block_id = Block.find_by(block_num: params[:block_num]).id
+		block_narrative =
+			BlockNarrative.find_or_create_by(
+				{ block_id: block_id, investigation_id: session[:investigations][0] },
+			)
+		puts block_narrative.block_id
+		puts block_narrative.investigation_id
+		render json: block_narrative, status: :created
+	end
 
 	def show; end
 
@@ -12,8 +21,4 @@ class BlockNarrativesController < ApplicationController
 	def destroy; end
 
 	private
-
-	def block_narr_params
-		params.permit
-	end
 end

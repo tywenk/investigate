@@ -4,12 +4,8 @@ class BlocksController < ApplicationController
 	end
 
 	def create
-		Block.upsert(block_params)
-		block = Block.find_by(block_num: params[:block_num])
+		block = Block.find_or_create_by(block_params)
 		render json: block, status: :created
-	rescue ActiveRecord::RecordNotUnique
-		block = Block.find_by(block_num: params[:block_num])
-		render json: block
 	end
 
 	private

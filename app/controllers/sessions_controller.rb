@@ -38,15 +38,17 @@ class SessionsController < ApplicationController
 			session[:ens] = params[:ens]
 			session[:address] = message.address
 
-			last_seen = DateTime.now
-			User.upsert(
-				{ address: message.address, last_seen: last_seen, ens: session[:ens] },
-			)
+			user =
+				User.find_or_create_by({ address: message.address, ens: session[:ens] })
+
+			investigation = Investigation.find_or_create_by({ user_id: user.id })
+
+			session[:investigations] = user.investigations.ids
 
 			render json: {
 					ens: session[:ens],
 					address: session[:address],
-					lastSeen: last_seen,
+					investigations: session[:investigations],
 			       }
 		else
 			head :bad_request
@@ -55,12 +57,10 @@ class SessionsController < ApplicationController
 
 	def profile
 		if @current_user
-			@current_user.seen
-			@current_user.save
 			render json: {
 					ens: session[:ens],
 					address: session[:address],
-					lastSeen: @current_user.last_seen,
+					investigations: session[:investigations],
 			       }
 		else
 			head :no_content
@@ -69,10 +69,9 @@ class SessionsController < ApplicationController
 
 	def sign_out
 		if @current_user
-			@current_user.seen
-			@current_user.save
 			session[:ens] = nil
 			session[:address] = nil
+			session[:investigations] = nil
 			head :no_content
 		else
 			head :unauthorized
