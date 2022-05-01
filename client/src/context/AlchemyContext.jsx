@@ -13,8 +13,6 @@ export const AlchemyProvider = ({ children }) => {
 		`https://eth-mainnet.alchemyapi.io/v2/${process.env.REACT_APP_ALCHEMY_API}`
 	)
 
-	console.log("Alchemy provider:", alcProvider)
-
 	return (
 		<AlchemyContext.Provider value={alcProvider}>
 			{children}

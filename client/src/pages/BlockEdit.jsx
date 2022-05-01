@@ -4,21 +4,49 @@ import { useAlchemy } from "../context/AlchemyContext"
 import { useUser } from "../context/UserContext"
 import BlockMetadata from "../components/BlockMetadata"
 import BlockTx from "../components/BlockTx"
+import Button from "../components/Button"
 
-const BlockEdit = () => {
+const BlockEdit = ({ isShow }) => {
 	const [blockData, setBlockData] = useState({})
 	const [isInvalidBlock, setIsInvalidBlock] = useState(false)
 	const [selectedTxs, setSelectedTxs] = useState({})
-	const [currentBlockNarrativeId, setCurrentBlockNarrativeId] = useState(null)
+	const { block: currentBlock, id: currentBlockNarrativeId } = useParams()
 	const alcProvider = useAlchemy()
 	const currentUser = useUser()
-	const { id: currentBlock } = useParams()
+
+	//format fetched narrative data from array to an object
+	const fmtFetchedNotes = async (res) => {
+		const blockNarrative = await res.json()
+		const notesObj = {}
+		blockNarrative.block_notes.map((note) => {
+			return (notesObj[note.tx_hash] = note)
+		})
+		console.log(notesObj)
+		setSelectedTxs(notesObj)
+	}
+
+	//format notes to send to backend from object to array
+	const fmtSendingNotes = (txs) => {
+		console.log({ notes: Object.values(txs) })
+		return { notes: Object.values(txs) }
+	}
 
 	useEffect(() => {
 		const data = async () => {
-			if (currentBlock === undefined) {
+			if (currentBlock === undefined || currentBlockNarrativeId === undefined) {
 				return
 			} else {
+				const res = await fetch(
+					`/block_narratives/${currentBlockNarrativeId}`,
+					{
+						method: "GET",
+						headers: {
+							"Content-Type": "application/json",
+						},
+					}
+				)
+				fmtFetchedNotes(res)
+
 				const block = await alcProvider.getBlockWithTransactions(
 					parseInt(currentBlock)
 				)
@@ -28,31 +56,25 @@ const BlockEdit = () => {
 				} else {
 					setIsInvalidBlock(true)
 				}
-
-				const res = await fetch("/block_narratives", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({ block_num: currentBlock }),
-				})
-
-				const blockNarrObj = await res.json()
-				setCurrentBlockNarrativeId(blockNarrObj.id)
 			}
 		}
 
 		data()
-	}, [currentBlock, alcProvider])
+	}, [currentBlock, currentBlockNarrativeId, alcProvider])
 
-	const handleSubmitBlockNarrative = async () => {
+	const handleSaveNarrative = async () => {
+		const notes = fmtSendingNotes(selectedTxs)
+
 		const res = await fetch("/block_notes", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify(selectedTxs),
+			body: JSON.stringify(notes),
 		})
+
+		const data = await res.json()
+		console.log(data)
 	}
 
 	if (!currentUser?.address) {
@@ -84,17 +106,20 @@ const BlockEdit = () => {
 				baseFeePerGas={blockData?.baseFeePerGas?.toString()}
 				minedBy={blockData?.miner}
 				txLength={blockData?.transactions?.length}
+				extraData={blockData?.extraData?.toString()}
 			/>
 
-			<button onClick={handleSubmitBlockNarrative}>Save</button>
+			<Button customOnClick={handleSaveNarrative}>Save</Button>
 
 			{blockData.transactions.map((tx) => {
 				return (
 					<BlockTx
 						tx={tx}
 						key={tx?.hash}
+						selectedTxs={selectedTxs}
 						setSelectedTxs={setSelectedTxs}
 						currentBlockNarrativeId={currentBlockNarrativeId}
+						isShow={isShow}
 					/>
 				)
 			})}

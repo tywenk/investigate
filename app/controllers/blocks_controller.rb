@@ -4,7 +4,7 @@ class BlocksController < ApplicationController
 	end
 
 	def create
-		block = Block.find_or_create_by(block_params)
+		block = Block.find_or_create_by!(block_params)
 		render json: block, status: :created
 	end
 

@@ -4,9 +4,9 @@ class BlockNarrativesController < ApplicationController
 	end
 
 	def create
-		block_id = Block.find_by(block_num: params[:block_num]).id
+		block_id = Block.find_by!(block_num: params[:block_num]).id
 		block_narrative =
-			BlockNarrative.find_or_create_by(
+			BlockNarrative.find_or_create_by!(
 				{ block_id: block_id, investigation_id: session[:investigations][0] },
 			)
 		puts block_narrative.block_id
@@ -14,7 +14,10 @@ class BlockNarrativesController < ApplicationController
 		render json: block_narrative, status: :created
 	end
 
-	def show; end
+	def show
+		block_narrative = BlockNarrative.find_by(id: params[:id])
+		render json: block_narrative
+	end
 
 	def update; end
 

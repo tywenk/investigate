@@ -1,5 +1,12 @@
-const Button = ({ children }) => {
-	return <button className='rounded-lg bg-green-300 p-2 m-2'>{children}</button>
+const Button = ({ children, customOnClick }) => {
+	return (
+		<button
+			className='rounded-full bg-green-300 px-2 py-1 m-1'
+			onClick={customOnClick}
+		>
+			{children}
+		</button>
+	)
 }
 
 export default Button

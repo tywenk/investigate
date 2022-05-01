@@ -39,9 +39,11 @@ class SessionsController < ApplicationController
 			session[:address] = message.address
 
 			user =
-				User.find_or_create_by({ address: message.address, ens: session[:ens] })
+				User.find_or_create_by!(
+					{ address: message.address, ens: session[:ens] },
+				)
 
-			investigation = Investigation.find_or_create_by({ user_id: user.id })
+			investigation = Investigation.find_or_create_by!({ user_id: user.id })
 
 			session[:investigations] = user.investigations.ids
 

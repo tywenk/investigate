@@ -37,9 +37,18 @@ const StartInputForm = ({ endpoint, route }) => {
 			},
 			body: JSON.stringify(submitContent),
 		})
-
 		const data = await res.json()
-		navigate(`/${route}/${data.block_num}/edit`)
+
+		const resNarr = await fetch(`/${route}_narratives`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ block_num: data.block_num }),
+		})
+		const narr = await resNarr.json()
+
+		navigate(`/${route}/${narr.id}/${data.block_num}/edit`)
 	}
 	return (
 		<div>
@@ -50,6 +59,7 @@ const StartInputForm = ({ endpoint, route }) => {
 					placeholder={formType}
 					value={formContent}
 					onChange={(e) => setFormContent(e.target.value)}
+					autoFocus
 				></input>
 				<input type='submit' value='Enter' />
 			</form>

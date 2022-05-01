@@ -111,7 +111,7 @@ const NavBar = () => {
 			<Link to='/'>Home</Link>
 			<Link to='/block'>Block</Link>
 			<Link to='/'>Transaction</Link>
-			<Link to='/'>Transaction</Link>
+			<Link to='/'>Address</Link>
 			<Link to='/investigations'>Explore</Link>
 		</div>
 	)

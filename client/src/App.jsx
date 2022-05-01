@@ -6,8 +6,9 @@ import UserProfile from "./pages/UserProfile"
 import UserInvestigations from "./pages/UserInvestigations"
 import InvestigationLayout from "./pages/InvestigationLayout"
 import Block from "./pages/Block"
-import BlockEdit from "./pages/BlockEdit"
+import BlockUserNarratives from "./pages/BlockUserNarratives"
 import BlockShow from "./pages/BlockShow"
+import BlockEdit from "./pages/BlockEdit"
 import { UserProvider } from "./context/UserContext"
 import { AlchemyProvider } from "./context/AlchemyContext"
 
@@ -34,8 +35,12 @@ const App = () => {
 								element={<InvestigationLayout />}
 							></Route>
 							<Route path='block' element={<Block />}></Route>
-							<Route path='block/:id' element={<BlockShow />}></Route>
-							<Route path='block/:id/edit' element={<BlockEdit />}></Route>
+							<Route path='block/:id' element={<BlockUserNarratives />}></Route>
+							<Route path='block/:id/:block' element={<BlockShow />}></Route>
+							<Route
+								path='block/:id/:block/edit'
+								element={<BlockEdit />}
+							></Route>
 							<Route
 								path='block/:id/:narrative'
 								element={<BlockEdit />}

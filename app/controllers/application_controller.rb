@@ -5,7 +5,7 @@ class ApplicationController < ActionController::API
 	            with: :render_unprocessable_entity_response
 	rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
 
-	before_action :auth_current_user
+	before_action :auth_current_user, :current_investigation
 
 	private
 
@@ -17,6 +17,10 @@ class ApplicationController < ActionController::API
 		unless @current_user
 			render json: { errors: ['Not authorized'] }, status: :unauthorized
 		end
+	end
+
+	def current_investigation
+		@investigation = session[:investigations][0] if session[:investigations]
 	end
 
 	def render_unprocessable_entity_response(exception)
