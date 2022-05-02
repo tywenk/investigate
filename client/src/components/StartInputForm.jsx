@@ -39,16 +39,7 @@ const StartInputForm = ({ endpoint, route }) => {
 		})
 		const data = await res.json()
 
-		const resNarr = await fetch(`/${route}_narratives`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({ block_num: data.block_num }),
-		})
-		const narr = await resNarr.json()
-
-		navigate(`/${route}/${narr.id}/${data.block_num}/edit`)
+		navigate(`/${route}/${data?.block_narratives?.[0]?.id}/${data.block_num}/edit`)
 	}
 	return (
 		<div>

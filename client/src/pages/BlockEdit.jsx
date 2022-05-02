@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react"
+import { useQuery } from "react-query"
 import { useParams, Link } from "react-router-dom"
 import { useAlchemy } from "../context/AlchemyContext"
 import { useUser } from "../context/UserContext"
+import { useBlockNotesData } from "../hooks/useBlockNotesData"
 import BlockMetadata from "../components/BlockMetadata"
 import BlockTx from "../components/BlockTx"
 import Button from "../components/Button"
@@ -10,20 +12,11 @@ const BlockEdit = ({ isShow }) => {
 	const [blockData, setBlockData] = useState({})
 	const [isInvalidBlock, setIsInvalidBlock] = useState(false)
 	const [selectedTxs, setSelectedTxs] = useState({})
-	const { block: currentBlock, id: currentBlockNarrativeId } = useParams()
+	const { blockNum: currentBlockNum, narrId: currentBlockNarrativeId } = useParams()
 	const alcProvider = useAlchemy()
 	const currentUser = useUser()
 
-	//format fetched narrative data from array to an object
-	const fmtFetchedNotes = async (res) => {
-		const blockNarrative = await res.json()
-		const notesObj = {}
-		blockNarrative.block_notes.map((note) => {
-			return (notesObj[note.tx_hash] = note)
-		})
-		console.log(notesObj)
-		setSelectedTxs(notesObj)
-	}
+	const { data, isLoading, isError, isSuccess, isIdle } = useBlockNotesData(currentBlockNarrativeId)
 
 	//format notes to send to backend from object to array
 	const fmtSendingNotes = (txs) => {
@@ -33,34 +26,18 @@ const BlockEdit = ({ isShow }) => {
 
 	useEffect(() => {
 		const data = async () => {
-			if (currentBlock === undefined || currentBlockNarrativeId === undefined) {
-				return
+			const block = await alcProvider.getBlockWithTransactions(parseInt(currentBlockNum))
+			if (block) {
+				setBlockData(block)
 			} else {
-				const res = await fetch(
-					`/block_narratives/${currentBlockNarrativeId}`,
-					{
-						method: "GET",
-						headers: {
-							"Content-Type": "application/json",
-						},
-					}
-				)
-				fmtFetchedNotes(res)
-
-				const block = await alcProvider.getBlockWithTransactions(
-					parseInt(currentBlock)
-				)
-
-				if (block) {
-					setBlockData(block)
-				} else {
-					setIsInvalidBlock(true)
-				}
+				setIsInvalidBlock(true)
 			}
 		}
 
-		data()
-	}, [currentBlock, currentBlockNarrativeId, alcProvider])
+		if (currentBlockNum !== undefined) {
+			data()
+		}
+	}, [currentBlockNum, alcProvider])
 
 	const handleSaveNarrative = async () => {
 		const notes = fmtSendingNotes(selectedTxs)
@@ -81,6 +58,10 @@ const BlockEdit = ({ isShow }) => {
 		return <div>Please connect metamask</div>
 	}
 
+	if (!currentBlockNarrativeId) {
+		return <div>This narrative does not exist</div>
+	}
+
 	if (isInvalidBlock) {
 		return (
 			<div>
@@ -91,11 +72,12 @@ const BlockEdit = ({ isShow }) => {
 	}
 
 	if (Object.keys(blockData).length === 0) {
-		return <div>Loading...</div>
+		return <div>Loading block data...</div>
 	}
 
 	return (
 		<div>
+			{data}
 			<Link to='/block'>New Block</Link>
 
 			<BlockMetadata

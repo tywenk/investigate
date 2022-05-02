@@ -15,7 +15,7 @@ class BlockNarrativesController < ApplicationController
 	end
 
 	def show
-		block_narrative = BlockNarrative.find_by(id: params[:id])
+		block_narrative = BlockNarrative.find_or_create_by!(id: params[:id])
 		render json: block_narrative
 	end
 

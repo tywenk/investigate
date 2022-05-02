@@ -34,9 +34,7 @@ export const UserProvider = ({ children }) => {
 
 	return (
 		<UserContext.Provider value={currentUser}>
-			<UserUpdateContext.Provider value={handleSetUser}>
-				{children}
-			</UserUpdateContext.Provider>
+			<UserUpdateContext.Provider value={handleSetUser}>{children}</UserUpdateContext.Provider>
 		</UserContext.Provider>
 	)
 }

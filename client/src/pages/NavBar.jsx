@@ -14,9 +14,7 @@ const NavBar = () => {
 	const signer = provider.getSigner()
 
 	const connectWallet = async () => {
-		const connect = await provider
-			.send("eth_requestAccounts", [])
-			.catch(() => console.log("user rejected request"))
+		const connect = await provider.send("eth_requestAccounts", []).catch(() => console.log("user rejected request"))
 
 		if (connect) {
 			signInWithEthereum()
@@ -46,10 +44,7 @@ const NavBar = () => {
 
 	const signInWithEthereum = async () => {
 		const address = await signer.getAddress()
-		const message = await createSiweMessage(
-			address,
-			"🌟 Sign into 0xInvestigate. 🌟"
-		)
+		const message = await createSiweMessage(address, "🌟 Sign into 0xInvestigate. 🌟")
 		const signature = await signer.signMessage(message)
 
 		let ens
@@ -101,9 +96,7 @@ const NavBar = () => {
 						<Link to='profile' className='truncate w-20'>
 							{currentUser.ens || currentUser.address}
 						</Link>
-						<Link to={`/investigations/${currentUser.address}`}>
-							My Investigations
-						</Link>
+						<Link to={`/investigations/${currentUser.address}`}>My Investigations</Link>
 					</div>
 				)}
 			</div>

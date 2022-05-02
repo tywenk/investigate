@@ -57,18 +57,6 @@ class SessionsController < ApplicationController
 		end
 	end
 
-	def profile
-		if @current_user
-			render json: {
-					ens: session[:ens],
-					address: session[:address],
-					investigations: session[:investigations],
-			       }
-		else
-			head :no_content
-		end
-	end
-
 	def sign_out
 		if @current_user
 			session[:ens] = nil

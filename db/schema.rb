@@ -50,7 +50,6 @@ ActiveRecord::Schema.define(version: 2022_04_28_215005) do
 
   create_table "users", force: :cascade do |t|
     t.string "address"
-    t.datetime "last_seen"
     t.string "ens"
     t.datetime "created_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false

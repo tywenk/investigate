@@ -2,18 +2,15 @@ import { ethers } from "ethers"
 import { useState, useRef, useEffect } from "react"
 import TextareaAutosize from "react-textarea-autosize"
 import Button from "../components/Button"
+import { useUser } from "../context/UserContext"
 
-const BlockTx = ({
-	tx,
-	selectedTxs,
-	setSelectedTxs,
-	currentBlockNarrativeId,
-	isShow,
-}) => {
+const BlockTx = ({ tx, selectedTxs, setSelectedTxs, currentBlockNarrativeId, isShow }) => {
 	const [showNote, setShowNote] = useState(false)
 	const [noteContent, setNoteContent] = useState("")
 	const [isShowMore, setIsShowMore] = useState(false)
+	const [canEdit, setCanEdit] = useState(false)
 	const noteInputRef = useRef()
+	const currentUser = useUser()
 
 	useEffect(() => {
 		if (showNote === true) {
@@ -23,8 +20,14 @@ const BlockTx = ({
 
 	useEffect(() => {
 		setNoteContent(selectedTxs?.[tx?.hash]?.note)
-		if (selectedTxs?.[tx?.hash]?.note) {
+		if (selectedTxs?.[tx?.hash]?.note && showNote !== true) {
 			setShowNote(true)
+		}
+
+		// console.log("current user:", currentUser)
+
+		if (currentUser?.info?.block_narratives[0] === currentBlockNarrativeId && isShow === false) {
+			setCanEdit(true)
 		}
 	}, [])
 
@@ -58,25 +61,19 @@ const BlockTx = ({
 				<div>{tx?.transactionIndex}</div>
 				<div className=' truncate'>{tx?.hash}</div>
 				<div className=''>Value: {ethers.utils.formatEther(tx?.value)} ETH</div>
-				<div className=''>
-					Gas Limit: {ethers.utils.formatUnits(tx?.gasLimit, "wei")} gas
-				</div>
-				<div className=''>
-					Gas Price: {ethers.utils.formatUnits(tx?.gasPrice, "gwei")} gwei
-				</div>
+				<div className=''>Gas Limit: {ethers.utils.formatUnits(tx?.gasLimit, "wei")} gas</div>
+				<div className=''>Gas Price: {ethers.utils.formatUnits(tx?.gasPrice, "gwei")} gwei</div>
 				{!isShowMore ? (
 					<button onClick={() => setIsShowMore(!isShowMore)}>Show more</button>
 				) : (
 					<>
 						<div className=' truncate'>From: {tx?.from}</div>
 						<div className=' truncate'>To: {tx?.to}</div>
-						<button onClick={() => setIsShowMore(!isShowMore)}>
-							Show less
-						</button>
+						<button onClick={() => setIsShowMore(!isShowMore)}>Show less</button>
 					</>
 				)}
 			</div>
-			{!showNote ? (
+			{!showNote && canEdit ? (
 				<button onClick={handleShowNote} className='border m-2 p-2 rounded-xl'>
 					Add note
 				</button>
@@ -91,10 +88,10 @@ const BlockTx = ({
 							placeholder='Add a note...'
 							value={noteContent}
 							onChange={handleOnNoteChange}
-							readOnly={isShow ? true : false}
+							readOnly={canEdit ? false : true}
 						/>
 					</form>
-					<Button customOnClick={handleDiscardNote}>Discard</Button>
+					{canEdit && <Button customOnClick={handleDiscardNote}>Discard</Button>}
 				</div>
 			)}
 		</div>

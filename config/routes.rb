@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-	resources :users
+	resources :users, except: [:show]
 	resources :sessions
 	resources :block_notes
 	resources :block_narratives
@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 	post '/message', to: 'sessions#message'
 	post '/sign-in', to: 'sessions#sign_in'
 	post '/sign-out', to: 'sessions#sign_out'
-	get '/autologin', to: 'sessions#profile'
+	get '/autologin', to: 'users#show'
 
 	# Routing logic: fallback requests for React Router.
 	# Leave this here to help deploy your app later!
