@@ -1,13 +1,25 @@
 class BlockNotesController < ApplicationController
+	def index
+		render json: BlockNote.all
+	end
+
 	def create
 		arr_notes = block_note_params[:notes]
-		block_note = BlockNote.create!(arr_notes)
-		render json: block_note, status: :created
+		pp arr_notes
+		block_notes = BlockNote.upsert_all(arr_notes, unique_by: :index_block_notes_on_tx_hash)
+		render json: block_notes, status: :created
 	end
+
+	def show
+		notes = BlockNote.where(block_narrative_id: params[:id])
+		render json: notes
+	end
+
+	def destroy; end
 
 	private
 
 	def block_note_params
-		params.permit({ notes: %i[tx_hash label note block_narrative_id] })
+		params.permit({ notes: %i[tx_hash note block_narrative_id] })
 	end
 end

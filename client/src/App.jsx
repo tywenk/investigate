@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import { QueryClient, QueryClientProvider } from "react-query"
-import { ReactQueryDevTools } from "react-query/devtools"
+import { ReactQueryDevtools } from "react-query/devtools"
 import Home from "./pages/Home"
 import NavBar from "./pages/NavBar"
 import UserProfile from "./pages/UserProfile"
@@ -45,7 +45,7 @@ const App = () => {
 					</Router>
 				</AlchemyProvider>
 			</UserProvider>
-			<ReactQueryDevTools initialIsOpen={false} position='bottom-right' />
+			<ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
 		</QueryClientProvider>
 	)
 }

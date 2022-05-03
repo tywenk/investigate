@@ -18,11 +18,7 @@ class SessionsController < ApplicationController
 				params[:address],
 				"#{request.protocol}#{request.host_with_port}",
 				'1',
-				{
-					statement: 'SIWE Investigate',
-					nonce: nonce,
-					chain_id: params[:chainId],
-				},
+				{ statement: 'SIWE Investigate', nonce: nonce, chain_id: params[:chainId] },
 			)
 
 		session[:message] = message.to_json_string
@@ -38,20 +34,13 @@ class SessionsController < ApplicationController
 			session[:ens] = params[:ens]
 			session[:address] = message.address
 
-			user =
-				User.find_or_create_by!(
-					{ address: message.address, ens: session[:ens] },
-				)
+			user = User.find_or_create_by!({ address: message.address, ens: session[:ens] })
 
 			investigation = Investigation.find_or_create_by!({ user_id: user.id })
 
 			session[:investigations] = user.investigations.ids
 
-			render json: {
-					ens: session[:ens],
-					address: session[:address],
-					investigations: session[:investigations],
-			       }
+			render json: user, serializer: UserSessionSerializer, ens: session[:ens]
 		else
 			head :bad_request
 		end

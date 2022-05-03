@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 2022_04_28_215005) do
     t.datetime "created_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.index ["block_narrative_id"], name: "index_block_notes_on_block_narrative_id"
+    t.index ["tx_hash"], name: "index_block_notes_on_tx_hash", unique: true
   end
 
   create_table "blocks", force: :cascade do |t|

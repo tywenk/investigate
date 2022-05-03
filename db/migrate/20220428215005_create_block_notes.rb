@@ -8,5 +8,6 @@ class CreateBlockNotes < ActiveRecord::Migration[6.1]
 
 			t.timestamps default: -> { 'CURRENT_TIMESTAMP' }
 		end
+		add_index :block_notes, :tx_hash, unique: true
 	end
 end

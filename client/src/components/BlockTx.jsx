@@ -4,9 +4,8 @@ import TextareaAutosize from "react-textarea-autosize"
 import Button from "../components/Button"
 import { useUser } from "../context/UserContext"
 
-const BlockTx = ({ tx, selectedTxs, setSelectedTxs, currentBlockNarrativeId, isShow }) => {
+const BlockTx = ({ tx, blockNotes, setBlockNotes, currentBlockNarrativeId, isShow }) => {
 	const [showNote, setShowNote] = useState(false)
-	const [noteContent, setNoteContent] = useState("")
 	const [isShowMore, setIsShowMore] = useState(false)
 	const [canEdit, setCanEdit] = useState(false)
 	const noteInputRef = useRef()
@@ -19,31 +18,34 @@ const BlockTx = ({ tx, selectedTxs, setSelectedTxs, currentBlockNarrativeId, isS
 	}, [showNote])
 
 	useEffect(() => {
-		setNoteContent(selectedTxs?.[tx?.hash]?.note)
-		if (selectedTxs?.[tx?.hash]?.note && showNote !== true) {
+		console.log("rerender tx")
+		if (blockNotes?.[tx?.hash]?.note && showNote !== true) {
 			setShowNote(true)
 		}
 
-		// console.log("current user:", currentUser)
-
-		if (currentUser?.info?.block_narratives[0] === currentBlockNarrativeId && isShow === false) {
-			setCanEdit(true)
+		if (currentUser?.block_narratives?.some((bn) => bn.id === parseInt(currentBlockNarrativeId))) {
+			if (!isShow) {
+				setCanEdit(true)
+			}
+		} else {
+			setCanEdit(false)
 		}
-	}, [])
+	}, [blockNotes, currentUser, currentBlockNarrativeId, isShow, showNote, tx])
 
 	const handleOnNoteChange = (e) => {
-		setNoteContent(e.target.value)
-		const note = {
-			tx_hash: tx?.hash,
-			label: "",
-			note: noteContent,
-			block_narrative_id: parseInt(currentBlockNarrativeId),
-		}
-		const newTxs = { ...selectedTxs, [tx?.hash]: note }
-		setSelectedTxs(newTxs)
-		// setSelectedTxs((currTxs) => {
-		// 	return { ...currTxs, [tx?.hash]: note }
-		// })
+		const noteContent = e.target.value
+
+		setBlockNotes((prevBlockNotes) => {
+			return {
+				...prevBlockNotes,
+				[tx?.hash]: {
+					...prevBlockNotes?.[tx?.hash],
+					tx_hash: tx?.hash,
+					block_narrative_id: currentBlockNarrativeId,
+					note: noteContent,
+				},
+			}
+		})
 	}
 
 	const handleShowNote = () => {
@@ -51,8 +53,18 @@ const BlockTx = ({ tx, selectedTxs, setSelectedTxs, currentBlockNarrativeId, isS
 	}
 
 	const handleDiscardNote = () => {
+		setBlockNotes((prevBlockNotes) => {
+			return {
+				...prevBlockNotes,
+				[tx?.hash]: {
+					...prevBlockNotes?.[tx?.hash],
+					tx_hash: tx?.hash,
+					block_narrative_id: currentBlockNarrativeId,
+					note: "",
+				},
+			}
+		})
 		setShowNote(false)
-		setNoteContent("")
 	}
 
 	return (
@@ -78,7 +90,7 @@ const BlockTx = ({ tx, selectedTxs, setSelectedTxs, currentBlockNarrativeId, isS
 					Add note
 				</button>
 			) : (
-				<div className='bg-slate-100 m-2 p-2 rounded-lg'>
+				<div className={showNote ? "bg-slate-100 m-2 p-2 rounded-lg" : "hidden"}>
 					<form>
 						<TextareaAutosize
 							ref={noteInputRef}
@@ -86,7 +98,7 @@ const BlockTx = ({ tx, selectedTxs, setSelectedTxs, currentBlockNarrativeId, isS
 							maxRows={6}
 							className='w-full rounded-md resize-none p-2'
 							placeholder='Add a note...'
-							value={noteContent}
+							value={blockNotes?.[tx?.hash]?.note}
 							onChange={handleOnNoteChange}
 							readOnly={canEdit ? false : true}
 						/>
