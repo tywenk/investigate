@@ -36,7 +36,15 @@ const BlockTxMore = ({ tx }) => {
 			<div>
 				Logs:
 				{txInfo?.logs.map((log) => {
-					return <div>{}</div>
+					return (
+						<div>
+							<div className='truncate'>Log Data: {log.data}</div>
+							<div className='truncate'>Log Index: {log.logIndex}</div>
+							{log.topics.map((topic) => {
+								return <div className='truncate'>Topic: {topic}</div>
+							})}
+						</div>
+					)
 				})}
 			</div>
 		</div>

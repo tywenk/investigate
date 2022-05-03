@@ -1,4 +1,5 @@
 class BlockNotesController < ApplicationController
+	skip_before_action :auth_current_user, only: %i[index show]
 	def index
 		render json: BlockNote.all
 	end

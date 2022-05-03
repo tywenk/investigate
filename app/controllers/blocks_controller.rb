@@ -6,9 +6,7 @@ class BlocksController < ApplicationController
 	def create
 		block = Block.find_or_create_by!(block_params)
 		block_narrative =
-			BlockNarrative.find_or_create_by!(
-				{ block_id: block.id, investigation_id: session[:investigations][0] },
-			)
+			BlockNarrative.find_or_create_by!({ investigation_id: session[:investigations][0], block_id: block.id })
 		render json: block, status: :created
 	end
 
