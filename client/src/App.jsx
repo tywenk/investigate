@@ -30,10 +30,9 @@ const App = () => {
 							<Route path='investigations/:addr' element={<UserInvestigations />}></Route>
 							<Route path='investigations' element={<InvestigationLayout />}></Route>
 							<Route path='block' element={<Block />}></Route>
-							<Route path='block/:id' element={<BlockUserNarratives />}></Route>
+							<Route path='block/:narrid' element={<BlockUserNarratives />}></Route>
 							<Route path='block/:narrId/:blockNum' element={<BlockShow />}></Route>
 							<Route path='block/:narrId/:blockNum/edit' element={<BlockEdit />}></Route>
-							<Route path='block/:id/:narrative' element={<BlockEdit />}></Route>
 							{/* <Route path='transaction' element={<TransactionEdit />}></Route>
 						<Route path='transaction/:id' element={<TransactionShow />}></Route>
 						<Route

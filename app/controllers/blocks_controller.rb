@@ -7,7 +7,7 @@ class BlocksController < ApplicationController
 		block = Block.find_or_create_by!(block_params)
 		block_narrative =
 			BlockNarrative.find_or_create_by!({ investigation_id: session[:investigations][0], block_id: block.id })
-		render json: block, status: :created
+		render json: block_narrative, serializer: BlockNarrativeAndBlockOnlySerializer, status: :created
 	end
 
 	private

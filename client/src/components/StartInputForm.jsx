@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
+//endpoint is plural, route is singular
 const StartInputForm = ({ endpoint, route }) => {
 	const [formContent, setFormContent] = useState("")
 	const [submitContent, setSubmitContent] = useState({})
@@ -41,7 +42,25 @@ const StartInputForm = ({ endpoint, route }) => {
 
 		console.log(data)
 
-		navigate(`/${route}/${data?.block_narratives?.[0]?.id}/${data.block_num}/edit`)
+		const narrId = data?.id
+		let hashNum
+
+		switch (endpoint) {
+			case "blocks":
+				hashNum = data?.block?.block_num
+				break
+			case "transactions":
+				hashNum = data?.transaction?.transaction_hash
+				break
+			case "addresses":
+				hashNum = data?.addresses?.address_hash
+				break
+			default:
+				hashNum = undefined
+				break
+		}
+
+		navigate(`/${route}/${narrId}/${hashNum}/edit`)
 	}
 	return (
 		<div>
