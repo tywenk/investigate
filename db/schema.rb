@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_28_215005) do
+ActiveRecord::Schema.define(version: 2022_05_03_193958) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,6 +49,29 @@ ActiveRecord::Schema.define(version: 2022_04_28_215005) do
     t.index ["user_id"], name: "index_investigations_on_user_id"
   end
 
+  create_table "transaction_narratives", force: :cascade do |t|
+    t.bigint "investigation_id", null: false
+    t.bigint "transaction_id", null: false
+    t.string "label"
+    t.text "note_to"
+    t.text "note_from"
+    t.text "note_contract_address"
+    t.text "note_gas_used"
+    t.text "note_effective_gas_price"
+    t.text "note_logs"
+    t.datetime "created_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.index ["investigation_id"], name: "index_transaction_narratives_on_investigation_id"
+    t.index ["transaction_id"], name: "index_transaction_narratives_on_transaction_id"
+  end
+
+  create_table "transactions", force: :cascade do |t|
+    t.string "transaction_hash"
+    t.datetime "created_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.index ["transaction_hash"], name: "index_transactions_on_transaction_hash", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "address"
     t.string "ens"
@@ -61,4 +84,6 @@ ActiveRecord::Schema.define(version: 2022_04_28_215005) do
   add_foreign_key "block_narratives", "investigations"
   add_foreign_key "block_notes", "block_narratives"
   add_foreign_key "investigations", "users"
+  add_foreign_key "transaction_narratives", "investigations"
+  add_foreign_key "transaction_narratives", "transactions"
 end

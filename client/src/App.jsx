@@ -6,10 +6,14 @@ import NavBar from "./pages/NavBar"
 import UserProfile from "./pages/UserProfile"
 import UserInvestigations from "./pages/UserInvestigations"
 import InvestigationLayout from "./pages/InvestigationLayout"
-import Block from "./pages/Block"
 import BlockUserNarratives from "./pages/BlockUserNarratives"
+import Block from "./pages/Block"
 import BlockShow from "./pages/BlockShow"
 import BlockEdit from "./pages/BlockEdit"
+import Transaction from "./pages/Transaction"
+import TransactionShow from "./pages/TransactionShow"
+import TransactionEdit from "./pages/TransactionEdit"
+import TransactionUserNarratives from "./pages/TransactionUserNarratives"
 import { UserProvider } from "./context/UserContext"
 import { AlchemyProvider } from "./context/AlchemyContext"
 
@@ -30,15 +34,13 @@ const App = () => {
 							<Route path='investigations/:addr' element={<UserInvestigations />}></Route>
 							<Route path='investigations' element={<InvestigationLayout />}></Route>
 							<Route path='block' element={<Block />}></Route>
-							<Route path='block/:narrid' element={<BlockUserNarratives />}></Route>
+							<Route path='block/:narrId' element={<BlockUserNarratives />}></Route>
 							<Route path='block/:narrId/:blockNum' element={<BlockShow />}></Route>
 							<Route path='block/:narrId/:blockNum/edit' element={<BlockEdit />}></Route>
-							{/* <Route path='transaction' element={<TransactionEdit />}></Route>
-						<Route path='transaction/:id' element={<TransactionShow />}></Route>
-						<Route
-							path='transaction/:id/edit'
-							element={<TransactionEdit />}
-						></Route> */}
+							<Route path='transaction' element={<Transaction />}></Route>
+							<Route path='transaction/:narrId' element={<TransactionUserNarratives />}></Route>
+							<Route path='transaction/:narrId' element={<TransactionShow />}></Route>
+							<Route path='transaction/:narrId/:txHash/edit' element={<TransactionEdit />}></Route>
 							<Route path='*' element={<p>There's nothing here: 404</p>} />
 						</Routes>
 					</Router>

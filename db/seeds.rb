@@ -8,7 +8,9 @@
 
 BlockNote.destroy_all
 BlockNarrative.destroy_all
+TransactionNarrative.destroy_all
 Investigation.destroy_all
+Transaction.destroy_all
 Block.destroy_all
 User.destroy_all
 
@@ -25,3 +27,6 @@ n =
 			tx_hash: '0xa7037a7fb8f7445fc5ca5cb7478cb63639ac658a9f27a702a7c930b3c21f0b19',
 		},
 	)
+
+t = Transaction.create({ transaction_hash: 0xdb6c970d0002a9b760ff8a11055401aaf1a36b67eed5b1bb8dfa355a6ce755de })
+t = TransactionNarrative.create({ investigation_id: i.id, transaction_id: t.id })

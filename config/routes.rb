@@ -5,6 +5,8 @@ Rails.application.routes.draw do
 	resources :block_narratives
 	resources :blocks
 	resources :investigations
+	resources :transaction_narratives
+	resources :transactions
 
 	root 'sessions#index'
 
