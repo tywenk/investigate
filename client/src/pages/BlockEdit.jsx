@@ -22,12 +22,13 @@ const BlockEdit = ({ isShow = false }) => {
 		const data = async () => {
 			const block = await alcProvider.getBlockWithTransactions(parseInt(currentBlockNum))
 
-			const logs = await alcProvider.getLogs({
-				fromBlock: parseInt(currentBlockNum),
-				toBlock: parseInt(currentBlockNum),
-			})
+			// const logs = await alcProvider.getLogs({
+			// 	fromBlock: parseInt(currentBlockNum),
+			// 	toBlock: parseInt(currentBlockNum),
+			// })
+			// console.log(logs)
+			// console.log(block.transactions)
 
-			console.log(logs)
 			if (block) {
 				setBlockData(block)
 			} else {
@@ -67,7 +68,9 @@ const BlockEdit = ({ isShow = false }) => {
 
 	return (
 		<div>
-			<Link to='/block'>New Block</Link>
+			<Button>
+				<Link to='/block'>New Block</Link>
+			</Button>
 
 			<BlockMetadata
 				blockNumber={blockData?.number}

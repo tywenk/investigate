@@ -2,6 +2,7 @@ import { ethers } from "ethers"
 import { useState, useRef, useEffect } from "react"
 import TextareaAutosize from "react-textarea-autosize"
 import Button from "../components/Button"
+import BlockTxMore from "../components/BlockTxMore"
 import { useUser } from "../context/UserContext"
 
 const BlockTx = ({ tx, blockNotes, setBlockNotes, currentBlockNarrativeId, isShow }) => {
@@ -18,15 +19,12 @@ const BlockTx = ({ tx, blockNotes, setBlockNotes, currentBlockNarrativeId, isSho
 	}, [showNote])
 
 	useEffect(() => {
-		console.log("rerender tx")
 		if (blockNotes?.[tx?.hash]?.note && showNote !== true) {
 			setShowNote(true)
 		}
 
-		if (currentUser?.block_narratives?.some((bn) => bn.id === parseInt(currentBlockNarrativeId))) {
-			if (!isShow) {
-				setCanEdit(true)
-			}
+		if (currentUser?.block_narratives?.some((bn) => bn.id === parseInt(currentBlockNarrativeId)) && !isShow) {
+			setCanEdit(true)
 		} else {
 			setCanEdit(false)
 		}
@@ -75,12 +73,13 @@ const BlockTx = ({ tx, blockNotes, setBlockNotes, currentBlockNarrativeId, isSho
 				<div className=''>Value: {ethers.utils.formatEther(tx?.value)} ETH</div>
 				<div className=''>Gas Limit: {ethers.utils.formatUnits(tx?.gasLimit, "wei")} gas</div>
 				<div className=''>Gas Price: {ethers.utils.formatUnits(tx?.gasPrice, "gwei")} gwei</div>
+				<div className=' truncate'>From: {tx?.from}</div>
+				<div className=' truncate'>To: {tx?.to}</div>
 				{!isShowMore ? (
 					<button onClick={() => setIsShowMore(!isShowMore)}>Show more</button>
 				) : (
 					<>
-						<div className=' truncate'>From: {tx?.from}</div>
-						<div className=' truncate'>To: {tx?.to}</div>
+						<BlockTxMore tx={tx} />
 						<button onClick={() => setIsShowMore(!isShowMore)}>Show less</button>
 					</>
 				)}

@@ -11,13 +11,13 @@ const BlockMetadata = ({ blockNumber, timestamp, gasUsed, gasLimit, baseFeePerGa
 			<div>
 				Timestamp:
 				{dayjs.unix(timestamp).utc().format("YYYY-MM-DDTHH:mm:ss:SSS[+UTC]")}
-				{dayjs.unix(timestamp).format("MMM D, YYYY h:mm:ss a")}
+				<span> ({dayjs.unix(timestamp).format("MMM D, YYYY h:mm:ss a")})</span>
 			</div>
-			<div>Gas Used: {gasUsed.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} gas</div>
-			<div>Gas Limit: {gasLimit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} gas</div>
+			<div>Gas Used: {ethers.utils.commify(gasUsed)} gas</div>
+			<div>Gas Limit: {ethers.utils.commify(gasLimit)} gas</div>
 			<div>Base Fee Per Gas: {ethers.utils.formatUnits(baseFeePerGas, "gwei")} gwei</div>
 			<div>Mined By: {minedBy}</div>
-			<div>Extra Data: {extraData}</div>
+			{/* <div>Extra Data: {extraData}</div> */}
 			<div>Transactions: {txLength}</div>
 		</div>
 	)

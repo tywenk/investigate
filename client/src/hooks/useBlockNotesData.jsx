@@ -20,7 +20,6 @@ const getBlockNotes = async ({ queryKey }) => {
 }
 
 const postBlockNotes = async (blockNotes) => {
-	console.log({ notes: Object.values(blockNotes) })
 	const notes = { notes: Object.values(blockNotes) }
 
 	const res = await fetch("/block_notes", {

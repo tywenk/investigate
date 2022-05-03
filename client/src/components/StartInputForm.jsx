@@ -39,6 +39,8 @@ const StartInputForm = ({ endpoint, route }) => {
 		})
 		const data = await res.json()
 
+		console.log(data)
+
 		navigate(`/${route}/${data?.block_narratives?.[0]?.id}/${data.block_num}/edit`)
 	}
 	return (
