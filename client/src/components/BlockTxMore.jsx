@@ -15,15 +15,6 @@ const BlockTxMore = ({ tx }) => {
 		data()
 	}, [tx, alcProvider])
 
-	const isContract = async (addr) => {
-		const contractCode = await alcProvider.getCode(tx?.to)
-		if (contractCode !== "0x") {
-			return <span>Contract</span>
-		} else {
-			return <span></span>
-		}
-	}
-
 	if (Object.keys(txInfo).length === 0) return <div>Loading...</div>
 
 	return (
@@ -40,8 +31,12 @@ const BlockTxMore = ({ tx }) => {
 						<div>
 							<div className='truncate'>Log Data: {log.data}</div>
 							<div className='truncate'>Log Index: {log.logIndex}</div>
-							{log.topics.map((topic) => {
-								return <div className='truncate'>Topic: {topic}</div>
+							{log.topics.map((topic, index) => {
+								return (
+									<div key={topic + index} className='truncate'>
+										Topic: {topic}
+									</div>
+								)
 							})}
 						</div>
 					)

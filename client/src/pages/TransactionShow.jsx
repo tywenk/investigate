@@ -1,5 +1,13 @@
+import TransactionEdit from "./TransactionEdit"
+
 const TransactionShow = () => {
-	return <div>TransactionShow</div>
+	return (
+		<div>
+			<div>Share</div>
+			<div>Made by user: </div>
+			<TransactionEdit isShow={true} />
+		</div>
+	)
 }
 
 export default TransactionShow

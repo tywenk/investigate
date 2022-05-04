@@ -1,16 +1,15 @@
 import { ethers } from "ethers"
 import { useState, useRef, useEffect } from "react"
-import TextareaAutosize from "react-textarea-autosize"
+import { useUser } from "../context/UserContext"
 import Tiptap from "../components/Tiptap"
 import Button from "../components/Button"
 import BlockTxMore from "../components/BlockTxMore"
-import { useUser } from "../context/UserContext"
 
 const BlockTx = ({ tx, blockNotes, setBlockNotes, currentBlockNarrativeId, isShow }) => {
 	const [showNote, setShowNote] = useState(false)
 	const [isShowMore, setIsShowMore] = useState(false)
 	const [canEdit, setCanEdit] = useState(false)
-	// const noteInputRef = useRef()
+	const noteInputRef = useRef()
 	const currentUser = useUser()
 
 	// useEffect(() => {
@@ -20,20 +19,25 @@ const BlockTx = ({ tx, blockNotes, setBlockNotes, currentBlockNarrativeId, isSho
 	// }, [showNote])
 
 	useEffect(() => {
-		if (blockNotes?.[tx?.hash]?.note && showNote !== true) {
-			setShowNote(true)
+		let isMounted = true
+		if (isMounted) {
+			if (blockNotes?.[tx?.hash]?.note && showNote !== true) {
+				setShowNote(true)
+			}
+
+			if (currentUser?.block_narratives?.some((bn) => bn.id === parseInt(currentBlockNarrativeId)) && !isShow) {
+				setCanEdit(true)
+			} else {
+				!canEdit && setCanEdit(false)
+			}
 		}
 
-		if (currentUser?.block_narratives?.some((bn) => bn.id === parseInt(currentBlockNarrativeId)) && !isShow) {
-			setCanEdit(true)
-		} else {
-			!canEdit && setCanEdit(false)
+		return () => {
+			isMounted = false
 		}
 	}, [blockNotes, currentUser, currentBlockNarrativeId, isShow, showNote])
 
 	const handleOnNoteChange = (noteContent) => {
-		console.log(noteContent.toString())
-
 		setBlockNotes((prevBlockNotes) => {
 			return {
 				...prevBlockNotes,

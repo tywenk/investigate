@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
 import { useAlchemy } from "../context/AlchemyContext"
-import { useUser } from "../context/UserContext"
 import { useBlockNotesData, usePostBlockNotesData } from "../hooks/useBlockNotesData"
 import BlockMetadata from "../components/BlockMetadata"
 import BlockTx from "../components/BlockTx"
@@ -13,21 +12,15 @@ const BlockEdit = ({ isShow = false }) => {
 	const [isInvalidBlock, setIsInvalidBlock] = useState(false)
 	const { blockNum: currentBlockNum, narrId: currentBlockNarrativeId } = useParams()
 	const alcProvider = useAlchemy()
-	const currentUser = useUser()
 
-	const { data: notes, isLoading, isError } = useBlockNotesData(currentBlockNarrativeId, setBlockNotes)
+	const { data } = useBlockNotesData(currentBlockNarrativeId, setBlockNotes)
 	const { mutate: postNotesData, isLoading: isPosting } = usePostBlockNotesData()
 
 	useEffect(() => {
+		let isMounted = true
+
 		const data = async () => {
 			const block = await alcProvider.getBlockWithTransactions(parseInt(currentBlockNum))
-
-			// const logs = await alcProvider.getLogs({
-			// 	fromBlock: parseInt(currentBlockNum),
-			// 	toBlock: parseInt(currentBlockNum),
-			// })
-			// console.log(logs)
-			// console.log(block.transactions)
 
 			if (block) {
 				setBlockData(block)
@@ -36,18 +29,20 @@ const BlockEdit = ({ isShow = false }) => {
 			}
 		}
 
-		if (currentBlockNum !== undefined) {
-			data()
+		if (isMounted) {
+			if (currentBlockNum !== undefined) {
+				data()
+			}
+		}
+
+		return () => {
+			isMounted = false
 		}
 	}, [currentBlockNum, alcProvider])
 
 	const handlePostNotes = async () => {
 		postNotesData(blockNotes)
 	}
-
-	// if (!currentUser?.address) {
-	// 	return <div>Please connect metamask</div>
-	// }
 
 	if (!currentBlockNarrativeId) {
 		return <div>This narrative does not exist</div>

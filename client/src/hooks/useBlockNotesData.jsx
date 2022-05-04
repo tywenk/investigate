@@ -2,10 +2,10 @@ import { useQuery, useMutation, useQueryClient } from "react-query"
 
 const onGetSuccess = (data, setBlockNotes) => {
 	setBlockNotes(data)
-	console.log("success fetching data", data)
+	console.log("success fetching block notes: ", data)
 }
 const onError = (error) => {
-	console.log("error fetching getBlockNotes", error)
+	console.log("error fetching block data", error)
 }
 
 const getBlockNotes = async ({ queryKey }) => {

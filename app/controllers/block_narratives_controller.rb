@@ -18,9 +18,5 @@ class BlockNarrativesController < ApplicationController
 		render json: block_narrative
 	end
 
-	def update; end
-
-	def destroy; end
-
 	private
 end

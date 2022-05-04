@@ -8,19 +8,24 @@ const StartInputForm = ({ endpoint, route }) => {
 	const [formType, setFormType] = useState("")
 	let navigate = useNavigate()
 
+	const sanitizeString = (str) => {
+		str = str.toString().replace(/[^a-z0-9áéíóúñü \.,_-]/gim, "")
+		return str.trim()
+	}
+
 	useEffect(() => {
 		switch (endpoint) {
 			case "blocks":
 				setFormType("Enter block number...")
-				setSubmitContent({ block_num: formContent })
+				setSubmitContent({ block_num: sanitizeString(formContent) })
 				break
-			case "transactions":
+			case "txns":
 				setFormType("Enter a transaction hash...")
-				setSubmitContent({ tx_hash: formContent })
+				setSubmitContent({ txn_hash: sanitizeString(formContent) })
 				break
 			case "addresses":
 				setFormType("Enter an address hash...")
-				setSubmitContent({ addr_hash: formContent })
+				setSubmitContent({ address_hash: sanitizeString(formContent) })
 				break
 			default:
 				setFormType("Enter value...")
@@ -30,6 +35,8 @@ const StartInputForm = ({ endpoint, route }) => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault()
+
+		console.log("string sent:", submitContent)
 
 		const res = await fetch(`/${endpoint}`, {
 			method: "POST",
@@ -43,24 +50,26 @@ const StartInputForm = ({ endpoint, route }) => {
 		console.log(data)
 
 		const narrId = data?.id
-		let hashNum
+		let hashOrNum
 
 		switch (endpoint) {
 			case "blocks":
-				hashNum = data?.block?.block_num
+				hashOrNum = data?.block?.block_num
 				break
-			case "transactions":
-				hashNum = data?.transaction?.transaction_hash
+			case "txns":
+				hashOrNum = data?.txn?.txn_hash
 				break
 			case "addresses":
-				hashNum = data?.addresses?.address_hash
+				hashOrNum = data?.addresses?.address_hash
 				break
 			default:
-				hashNum = undefined
+				hashOrNum = undefined
 				break
 		}
 
-		navigate(`/${route}/${narrId}/${hashNum}/edit`)
+		console.log("hashOrNum", hashOrNum)
+
+		navigate(`/${route}/${narrId}/${hashOrNum}/edit`)
 	}
 	return (
 		<div>

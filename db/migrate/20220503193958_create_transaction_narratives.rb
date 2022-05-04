@@ -2,7 +2,7 @@ class CreateTransactionNarratives < ActiveRecord::Migration[6.1]
 	def change
 		create_table :transaction_narratives do |t|
 			t.belongs_to :investigation, null: false, foreign_key: true
-			t.belongs_to :transaction, null: false, foreign_key: true
+			t.belongs_to :txn, null: false, foreign_key: true
 			t.string :label
 			t.text :note_to
 			t.text :note_from

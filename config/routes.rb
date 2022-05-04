@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+	resources :txns
 	resources :users, except: [:show]
 	resources :sessions
 	resources :block_notes, except: [:update]
@@ -6,7 +7,6 @@ Rails.application.routes.draw do
 	resources :blocks
 	resources :investigations
 	resources :transaction_narratives
-	resources :transactions
 
 	root 'sessions#index'
 
