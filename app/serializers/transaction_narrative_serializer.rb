@@ -9,4 +9,5 @@ class TransactionNarrativeSerializer < ActiveModel::Serializer
 	           :note_logs
 	has_one :investigation
 	has_one :txn
+	has_one :user, serializer: UserSerializer
 end

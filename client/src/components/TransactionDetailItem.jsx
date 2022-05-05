@@ -7,10 +7,10 @@ const TransactionDetailItem = ({ label, data, noteObjKey, canEdit, txNotes, setT
 
 	useEffect(() => {
 		//if tx has notes, set show true
-		// if (blockNotes?.[tx?.hash]?.note && showNote !== true) {
-		// 	setShowNote(true)
-		// }
-	}, [])
+		if (txNotes?.[noteObjKey] && txNotes !== true) {
+			setShowNote(true)
+		}
+	}, [txNotes, setShowNote])
 
 	const handleOnNoteChange = (noteContent) => {
 		setTxNotes((prevTxNotes) => {
@@ -29,14 +29,15 @@ const TransactionDetailItem = ({ label, data, noteObjKey, canEdit, txNotes, setT
 		setTxNotes((prevTxNotes) => {
 			return {
 				...prevTxNotes,
-				[noteObjKey]: noteContent,
+				[noteObjKey]: null,
 			}
 		})
+		setShowNote(false)
 	}
 
 	return (
-		<div className='grid grid-cols-2'>
-			<div>
+		<div className='grid grid-cols-2 w-1/2 bg-slate-100 m-1 p-2 rounded-lg'>
+			<div className='truncate'>
 				{label} {data}
 			</div>
 

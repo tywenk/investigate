@@ -11,7 +11,7 @@ class ApplicationController < ActionController::API
 	def auth_current_user
 		@current_user ||= User.find_by(address: session[:address]) if session[:address]
 
-		render json: { errors: ['Not authorized'] }, status: :unauthorized unless @current_user
+		# render json: { errors: ['Not authorized'] }, status: :unauthorized unless @current_user
 	end
 
 	def current_investigation

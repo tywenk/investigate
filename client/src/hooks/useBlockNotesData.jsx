@@ -9,7 +9,7 @@ const onError = (error) => {
 }
 
 const getBlockNotes = async ({ queryKey }) => {
-	const [_, currentBlockNarrativeId] = queryKey
+	const [, currentBlockNarrativeId] = queryKey
 	const res = await fetch(`/block_notes/${currentBlockNarrativeId}`, {
 		method: "GET",
 		headers: {

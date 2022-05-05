@@ -5,6 +5,7 @@ import { useBlockNotesData, usePostBlockNotesData } from "../hooks/useBlockNotes
 import BlockMetadata from "../components/BlockMetadata"
 import BlockTx from "../components/BlockTx"
 import Button from "../components/Button"
+import _ from "lodash"
 
 const BlockEdit = ({ isShow = false }) => {
 	const [blockData, setBlockData] = useState({})
@@ -16,9 +17,9 @@ const BlockEdit = ({ isShow = false }) => {
 	const { data } = useBlockNotesData(currentBlockNarrativeId, setBlockNotes)
 	const { mutate: postNotesData, isLoading: isPosting } = usePostBlockNotesData()
 
-	useEffect(() => {
-		let isMounted = true
+	console.log(_.isEqual(data, blockNotes))
 
+	useEffect(() => {
 		const data = async () => {
 			const block = await alcProvider.getBlockWithTransactions(parseInt(currentBlockNum))
 
@@ -29,14 +30,8 @@ const BlockEdit = ({ isShow = false }) => {
 			}
 		}
 
-		if (isMounted) {
-			if (currentBlockNum !== undefined) {
-				data()
-			}
-		}
-
-		return () => {
-			isMounted = false
+		if (currentBlockNum !== undefined) {
+			data()
 		}
 	}, [currentBlockNum, alcProvider])
 
@@ -78,7 +73,11 @@ const BlockEdit = ({ isShow = false }) => {
 				extraData={blockData?.extraData?.toString()}
 			/>
 
-			<Button customOnClick={handlePostNotes}>Save</Button>
+			<div>
+				<Button customOnClick={handlePostNotes}>Save</Button>
+				{isPosting ? <span>Saving...</span> : <></>}
+				{_.isEqual(data, blockNotes) ? <span></span> : <span>Unsaved changes</span>}
+			</div>
 
 			{blockData.transactions.map((tx) => {
 				return (

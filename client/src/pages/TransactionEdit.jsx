@@ -3,6 +3,8 @@ import { useParams, Link } from "react-router-dom"
 import { useAlchemy } from "../context/AlchemyContext"
 import Button from "../components/Button"
 import TransactionDetail from "../components/TransactionDetail"
+import { useTransactionNotesData, usePostTransactionNotesData } from "../hooks/useTransactionNotesData"
+import _ from "lodash"
 
 const TransactionEdit = ({ isShow }) => {
 	const [txData, setTxData] = useState({})
@@ -11,11 +13,16 @@ const TransactionEdit = ({ isShow }) => {
 	const { txHash: currentTxHash, narrId: currentTxNarrativeId } = useParams()
 	const alcProvider = useAlchemy()
 
+	const { data } = useTransactionNotesData(currentTxNarrativeId, setTxNotes)
+	const { mutate: postNotesData, isLoading: isPosting } = usePostTransactionNotesData()
+
 	useEffect(() => {
 		const data = async () => {
 			const tx = await alcProvider.getTransactionReceipt(currentTxHash.toString())
+			const tx2 = await alcProvider.getTransaction(currentTxHash.toString())
 
 			if (tx) {
+				tx.value = tx2.value
 				setTxData(tx)
 			} else {
 				setIsInvalidBlock(true)
@@ -27,6 +34,10 @@ const TransactionEdit = ({ isShow }) => {
 		}
 	}, [currentTxHash, alcProvider])
 
+	const handlePostNotes = async () => {
+		postNotesData(txNotes)
+	}
+
 	if (!currentTxNarrativeId) {
 		return <div>This narrative does not exist</div>
 	}
@@ -34,8 +45,8 @@ const TransactionEdit = ({ isShow }) => {
 	if (isInvalidBlock) {
 		return (
 			<div>
-				<div>Invalid Block Input</div>
-				<Link to='/block'>Try again</Link>
+				<div>Invalid Transaction Input</div>
+				<Link to='/transaction'>Try again</Link>
 			</div>
 		)
 	}
@@ -49,6 +60,11 @@ const TransactionEdit = ({ isShow }) => {
 			<Button>
 				<Link to='/transaction'>New Transaction</Link>
 			</Button>
+			<div>
+				<Button customOnClick={handlePostNotes}>Save</Button>
+				{isPosting ? <span>Posting...</span> : <></>}
+				{_.isEqual(data, txNotes) ? <span></span> : <span>Unsaved changes</span>}
+			</div>
 			<TransactionDetail
 				tx={txData}
 				alcProvider={alcProvider}

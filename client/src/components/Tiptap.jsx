@@ -10,7 +10,7 @@ const Tiptap = ({ canEdit, onNoteChange, content }) => {
 			onNoteChange(editor.getHTML())
 		},
 		autoFocus: true,
-		editable: canEdit ? true : false,
+		editable: canEdit,
 	})
 
 	return (
@@ -37,7 +37,7 @@ const Tiptap = ({ canEdit, onNoteChange, content }) => {
 					</button>
 				</BubbleMenu>
 			)}
-			<TiptapMenuBar editor={editor} />
+			{canEdit && <TiptapMenuBar editor={editor} />}
 			<EditorContent editor={editor} className='bg-white  p-2 rounded-lg' />
 		</>
 	)

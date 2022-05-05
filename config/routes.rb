@@ -15,7 +15,6 @@ Rails.application.routes.draw do
 	post '/sign-in', to: 'sessions#sign_in'
 	post '/sign-out', to: 'sessions#sign_out'
 	get '/autologin', to: 'users#show'
-	post 'block-notes/update-all', to: 'block_notes#update'
 
 	# Routing logic: fallback requests for React Router.
 	# Leave this here to help deploy your app later!

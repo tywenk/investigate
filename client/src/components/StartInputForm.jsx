@@ -35,8 +35,7 @@ const StartInputForm = ({ endpoint, route }) => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault()
-
-		console.log("string sent:", submitContent)
+		console.log(submitContent)
 
 		const res = await fetch(`/${endpoint}`, {
 			method: "POST",
@@ -46,8 +45,6 @@ const StartInputForm = ({ endpoint, route }) => {
 			body: JSON.stringify(submitContent),
 		})
 		const data = await res.json()
-
-		console.log(data)
 
 		const narrId = data?.id
 		let hashOrNum
@@ -66,8 +63,6 @@ const StartInputForm = ({ endpoint, route }) => {
 				hashOrNum = undefined
 				break
 		}
-
-		console.log("hashOrNum", hashOrNum)
 
 		navigate(`/${route}/${narrId}/${hashOrNum}/edit`)
 	}

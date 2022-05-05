@@ -96,7 +96,7 @@ const NavBar = () => {
 						<Link to='profile' className='truncate w-20'>
 							{currentUser.ens || currentUser.address}
 						</Link>
-						<Link to={`/investigations/${currentUser.address}`}>My Investigations</Link>
+						<Link to={`/narratives/${currentUser.address}`}>My Narratives</Link>
 					</div>
 				)}
 			</div>
@@ -104,8 +104,7 @@ const NavBar = () => {
 			<Link to='/'>Home</Link>
 			<Link to='/block'>Block</Link>
 			<Link to='/transaction'>Transaction</Link>
-			<Link to='/'>Address</Link>
-			<Link to='/investigations'>Explore</Link>
+			<Link to='/narratives'>Explore</Link>
 		</div>
 	)
 }

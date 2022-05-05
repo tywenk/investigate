@@ -10,7 +10,7 @@ BlockNote.destroy_all
 BlockNarrative.destroy_all
 TransactionNarrative.destroy_all
 Investigation.destroy_all
-Transaction.destroy_all
+Txn.destroy_all
 Block.destroy_all
 User.destroy_all
 
@@ -28,5 +28,5 @@ n =
 		},
 	)
 
-t = Transaction.create({ transaction_hash: 0xdb6c970d0002a9b760ff8a11055401aaf1a36b67eed5b1bb8dfa355a6ce755de })
-t = TransactionNarrative.create({ investigation_id: i.id, transaction_id: t.id })
+# t = Txn.create({ txn_hash: '0xdb6c970d0002a9b760ff8a11055401aaf1a36b67eed5b1bb8dfa355a6ce755de' })
+# t = TransactionNarrative.create({ investigation_id: i.id, txn_id: t.id, note_from: 'Hello this is from the backend' })

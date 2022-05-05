@@ -4,8 +4,8 @@ import { ReactQueryDevtools } from "react-query/devtools"
 import Home from "./pages/Home"
 import NavBar from "./pages/NavBar"
 import UserProfile from "./pages/UserProfile"
-import UserInvestigations from "./pages/UserInvestigations"
-import InvestigationLayout from "./pages/InvestigationLayout"
+import AllNarratives from "./pages/AllNarratives"
+import MyNarratives from "./pages/UserNarratives"
 import BlockUserNarratives from "./pages/BlockUserNarratives"
 import Block from "./pages/Block"
 import BlockShow from "./pages/BlockShow"
@@ -31,8 +31,8 @@ const App = () => {
 						<Routes>
 							<Route index element={<Home />}></Route>
 							<Route path='profile' element={<UserProfile />}></Route>
-							<Route path='investigations/:addr' element={<UserInvestigations />}></Route>
-							<Route path='investigations' element={<InvestigationLayout />}></Route>
+							<Route path='narratives/:addr' element={<MyNarratives />}></Route>
+							<Route path='narratives' element={<AllNarratives />}></Route>
 							<Route path='block' element={<Block />}></Route>
 							<Route path='block/:narrId' element={<BlockUserNarratives />}></Route>
 							<Route path='block/:narrId/:blockNum' element={<BlockShow />}></Route>

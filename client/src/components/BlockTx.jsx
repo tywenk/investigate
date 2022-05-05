@@ -19,23 +19,16 @@ const BlockTx = ({ tx, blockNotes, setBlockNotes, currentBlockNarrativeId, isSho
 	// }, [showNote])
 
 	useEffect(() => {
-		let isMounted = true
-		if (isMounted) {
-			if (blockNotes?.[tx?.hash]?.note && showNote !== true) {
-				setShowNote(true)
-			}
-
-			if (currentUser?.block_narratives?.some((bn) => bn.id === parseInt(currentBlockNarrativeId)) && !isShow) {
-				setCanEdit(true)
-			} else {
-				!canEdit && setCanEdit(false)
-			}
+		if (blockNotes?.[tx?.hash]?.note && showNote !== true) {
+			setShowNote(true)
 		}
 
-		return () => {
-			isMounted = false
+		if (currentUser?.block_narratives?.some((bn) => bn.id === parseInt(currentBlockNarrativeId)) && !isShow) {
+			setCanEdit(true)
+		} else {
+			!canEdit && setCanEdit(false)
 		}
-	}, [blockNotes, currentUser, currentBlockNarrativeId, isShow, showNote])
+	}, [blockNotes, currentUser, currentBlockNarrativeId, isShow, showNote, canEdit, tx?.hash])
 
 	const handleOnNoteChange = (noteContent) => {
 		setBlockNotes((prevBlockNotes) => {

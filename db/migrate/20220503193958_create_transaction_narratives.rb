@@ -10,6 +10,7 @@ class CreateTransactionNarratives < ActiveRecord::Migration[6.1]
 			t.text :note_gas_used
 			t.text :note_effective_gas_price
 			t.text :note_logs
+			t.text :note_value
 
 			t.timestamps default: -> { 'CURRENT_TIMESTAMP' }
 		end

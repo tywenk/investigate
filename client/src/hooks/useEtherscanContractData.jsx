@@ -5,11 +5,7 @@ const getContractSourceCode = async ({ queryKey }) => {
 
 	let res
 
-	console.log("hitting")
-	console.log("contract addr", contractAddr)
-
 	if (contractAddr) {
-		console.log("contract addr if ok", contractAddr)
 		res = await fetch(
 			`https://api.etherscan.io/api?module=contract&action=getsourcecode&address=${contractAddr.toString()}&apikey=${
 				process.env.REACT_APP_ETHERSCAN_API
