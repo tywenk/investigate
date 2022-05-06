@@ -6,7 +6,9 @@ class TransactionNarrativeSerializer < ActiveModel::Serializer
 	           :note_contract_address,
 	           :note_gas_used,
 	           :note_effective_gas_price,
-	           :note_logs
+	           :note_logs,
+	           :created_at,
+	           :updated_at
 	has_one :investigation
 	has_one :txn
 	has_one :user, serializer: UserSerializer

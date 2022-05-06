@@ -24,24 +24,6 @@ const BlockTxMore = ({ tx }) => {
 				Effective Gas Price: {ethers.utils.formatUnits(txInfo?.effectiveGasPrice, "gwei").toString()} gwei
 			</div>
 			<div>Gas Used: {ethers.utils.formatUnits(txInfo?.gasUsed, "gwei").toString()} gwei</div>
-			<div>
-				Logs:
-				{txInfo?.logs.map((log) => {
-					return (
-						<div>
-							<div className='truncate'>Log Data: {log.data}</div>
-							<div className='truncate'>Log Index: {log.logIndex}</div>
-							{log.topics.map((topic, index) => {
-								return (
-									<div key={topic + index} className='truncate'>
-										Topic: {topic}
-									</div>
-								)
-							})}
-						</div>
-					)
-				})}
-			</div>
 		</div>
 	)
 }

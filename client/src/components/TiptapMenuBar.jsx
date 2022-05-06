@@ -1,3 +1,10 @@
+import { FiCode } from "react-icons/fi"
+import { BsTextParagraph, BsCodeSquare } from "react-icons/bs"
+import { MdFormatListBulleted, MdFormatListNumbered } from "react-icons/md"
+import { IoTextOutline } from "react-icons/io5"
+import { GrBlockQuote } from "react-icons/gr"
+import { BiText, BiItalic, BiStrikethrough, BiBold } from "react-icons/bi"
+
 const TiptapMenuBar = ({ editor }) => {
 	if (!editor) {
 		return null
@@ -5,54 +12,108 @@ const TiptapMenuBar = ({ editor }) => {
 
 	return (
 		<>
-			<button onClick={() => editor.chain().focus().unsetAllMarks().run()}>clear marks</button>
-			<button onClick={() => editor.chain().focus().clearNodes().run()}>clear nodes</button>
-			<button
-				onClick={() => editor.chain().focus().toggleCode().run()}
-				className={editor.isActive("code") ? "is-active" : ""}
-			>
-				code
-			</button>
 			<button
 				onClick={() => editor.chain().focus().setParagraph().run()}
-				className={editor.isActive("paragraph") ? "is-active" : ""}
+				className={
+					editor.isActive("paragraph")
+						? "border border-blue-500 rounded-xl mx-0.5 px-1.5 py-0.5 bg-secondary hover:bg-secondaryHover"
+						: "border border-blue-300 rounded-xl mx-0.5 px-1.5 py-0.5 hover:bg-secondary"
+				}
 			>
-				paragraph
+				<BsTextParagraph />
 			</button>
 			<button
 				onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-				className={editor.isActive("heading", { level: 1 }) ? "is-active" : ""}
+				className={
+					editor.isActive("heading", { level: 1 })
+						? "border border-blue-500 rounded-xl mx-0.5 px-1.5 py-0.5 bg-secondary hover:bg-secondaryHover"
+						: "border border-blue-300 rounded-xl mx-0.5 px-1.5 py-0.5 hover:bg-secondary"
+				}
 			>
-				h1
+				<IoTextOutline />
 			</button>
 			<button
-				onClick={() => editor.chain().focus().toggleBulletList().run()}
-				className={editor.isActive("bulletList") ? "is-active" : ""}
+				onClick={() => editor.chain().focus().toggleBold().run()}
+				className={
+					editor.isActive("bold")
+						? "border border-blue-500 rounded-xl mx-0.5 px-1.5 py-0.5 bg-secondary hover:bg-secondaryHover"
+						: "border border-blue-300 rounded-xl mx-0.5 px-1.5 py-0.5 hover:bg-secondary"
+				}
 			>
-				bullet list
+				<BiBold />
+			</button>
+			<button
+				onClick={() => editor.chain().focus().toggleItalic().run()}
+				className={
+					editor.isActive("italic")
+						? "border border-blue-500 rounded-xl mx-0.5 px-1.5 py-0.5 bg-secondary hover:bg-secondaryHover"
+						: "border border-blue-300 rounded-xl mx-0.5 px-1.5 py-0.5 hover:bg-secondary"
+				}
+			>
+				<BiItalic />
+			</button>
+			<button
+				onClick={() => editor.chain().focus().toggleStrike().run()}
+				className={
+					editor.isActive("strike")
+						? "border border-blue-500 rounded-xl mx-0.5 px-1.5 py-0.5 bg-secondary hover:bg-secondaryHover"
+						: "border border-blue-300 rounded-xl mx-0.5 px-1.5 py-0.5 hover:bg-secondary"
+				}
+			>
+				<BiStrikethrough />
+			</button>
+
+			<button
+				onClick={() => editor.chain().focus().toggleCode().run()}
+				className={
+					editor.isActive("code")
+						? "border border-blue-500 rounded-xl mx-0.5 px-1.5 py-0.5 bg-secondary hover:bg-secondaryHover"
+						: "border border-blue-300 rounded-xl mx-0.5 px-1.5 py-0.5 hover:bg-secondary"
+				}
+			>
+				<FiCode />
+			</button>
+
+			<button
+				onClick={() => editor.chain().focus().toggleBulletList().run()}
+				className={
+					editor.isActive("bulletList")
+						? "border border-blue-500 rounded-xl mx-0.5 px-1.5 py-0.5 bg-secondary hover:bg-secondaryHover"
+						: "border border-blue-300 rounded-xl mx-0.5 px-1.5 py-0.5 hover:bg-secondary"
+				}
+			>
+				<MdFormatListBulleted />
 			</button>
 			<button
 				onClick={() => editor.chain().focus().toggleOrderedList().run()}
-				className={editor.isActive("orderedList") ? "is-active" : ""}
+				className={
+					editor.isActive("orderedList")
+						? "border border-blue-500 rounded-xl mx-0.5 px-1.5 py-0.5 bg-secondary hover:bg-secondaryHover"
+						: "border border-blue-300 rounded-xl mx-0.5 px-1.5 py-0.5 hover:bg-secondary"
+				}
 			>
-				ordered list
+				<MdFormatListNumbered />
 			</button>
 			<button
 				onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-				className={editor.isActive("codeBlock") ? "is-active" : ""}
+				className={
+					editor.isActive("codeBlock")
+						? "border border-blue-500 rounded-xl mx-0.5 px-1.5 py-0.5 bg-secondary hover:bg-secondaryHover"
+						: "border border-blue-300 rounded-xl mx-0.5 px-1.5 py-0.5 hover:bg-secondary"
+				}
 			>
-				code block
+				<BsCodeSquare />
 			</button>
 			<button
 				onClick={() => editor.chain().focus().toggleBlockquote().run()}
-				className={editor.isActive("blockquote") ? "is-active" : ""}
+				className={
+					editor.isActive("blockquote")
+						? "border border-blue-500 rounded-xl mx-0.5 px-1.5 py-0.5 bg-secondary hover:bg-secondaryHover"
+						: "border border-blue-300 rounded-xl mx-0.5 px-1.5 py-0.5 hover:bg-secondary"
+				}
 			>
-				blockquote
+				<GrBlockQuote />
 			</button>
-			<button onClick={() => editor.chain().focus().setHorizontalRule().run()}>horizontal rule</button>
-			<button onClick={() => editor.chain().focus().setHardBreak().run()}>hard break</button>
-			<button onClick={() => editor.chain().focus().undo().run()}>undo</button>
-			<button onClick={() => editor.chain().focus().redo().run()}>redo</button>
 		</>
 	)
 }

@@ -15,10 +15,10 @@ const getContractSourceCode = async ({ queryKey }) => {
 	return res?.json()
 }
 
-export const useEtherscanContractData = (contractAddr) => {
+export const useEtherscanContractData = (contractAddr, setContractData) => {
 	return useQuery(["etherscanContract", contractAddr], getContractSourceCode, {
-		// onSuccess: () => console.log("Sucessfull retrieved data from Etherscan"),
-		retry: 2,
+		onSuccess: (data) => setContractData(data),
+		// retry: 2,
 		refetchOnWindowFocus: false,
 	})
 }

@@ -1,17 +1,20 @@
 import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
 import { useAlchemy } from "../context/AlchemyContext"
-import Button from "../components/Button"
-import TransactionDetail from "../components/TransactionDetail"
+import { useUser } from "../context/UserContext"
 import { useTransactionNotesData, usePostTransactionNotesData } from "../hooks/useTransactionNotesData"
 import _ from "lodash"
+import Button from "../components/Button"
+import TransactionDetail from "../components/TransactionDetail"
 
-const TransactionEdit = ({ isShow }) => {
+const TransactionEdit = ({ isShow = false }) => {
 	const [txData, setTxData] = useState({})
 	const [txNotes, setTxNotes] = useState({})
 	const [isInvalidBlock, setIsInvalidBlock] = useState(false)
+	const [canEdit, setCanEdit] = useState(false)
 	const { txHash: currentTxHash, narrId: currentTxNarrativeId } = useParams()
 	const alcProvider = useAlchemy()
+	const currentUser = useUser()
 
 	const { data } = useTransactionNotesData(currentTxNarrativeId, setTxNotes)
 	const { mutate: postNotesData, isLoading: isPosting } = usePostTransactionNotesData()
@@ -33,6 +36,14 @@ const TransactionEdit = ({ isShow }) => {
 			data()
 		}
 	}, [currentTxHash, alcProvider])
+
+	useEffect(() => {
+		if (currentUser?.transaction_narratives?.some((tx) => tx.id === parseInt(currentTxNarrativeId)) && !isShow) {
+			setCanEdit(true)
+		} else {
+			!canEdit && setCanEdit(false)
+		}
+	}, [txData, currentUser, currentTxNarrativeId, isShow])
 
 	const handlePostNotes = async () => {
 		postNotesData(txNotes)
@@ -57,15 +68,21 @@ const TransactionEdit = ({ isShow }) => {
 
 	return (
 		<div>
-			<Button>
-				<Link to='/transaction'>New Transaction</Link>
-			</Button>
-			<div>
-				<Button customOnClick={handlePostNotes}>Save</Button>
-				{isPosting ? <span>Posting...</span> : <></>}
-				{_.isEqual(data, txNotes) ? <span></span> : <span>Unsaved changes</span>}
-			</div>
+			{canEdit && (
+				<>
+					{" "}
+					<Button>
+						<Link to='/transaction'>New Transaction</Link>
+					</Button>
+					<div>
+						<Button customOnClick={handlePostNotes}>Save</Button>
+						{isPosting ? <span>Posting...</span> : <></>}
+						{_.isEqual(data, txNotes) ? <span></span> : <span>Unsaved changes</span>}
+					</div>
+				</>
+			)}
 			<TransactionDetail
+				canEdit={canEdit}
 				tx={txData}
 				alcProvider={alcProvider}
 				currentTxNarrativeId={currentTxNarrativeId}

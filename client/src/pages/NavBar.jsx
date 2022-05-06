@@ -2,7 +2,8 @@ import React from "react"
 import { ethers } from "ethers"
 import { SiweMessage } from "siwe"
 import { useUser, useUserUpdate } from "../context/UserContext"
-import { Link } from "react-router-dom"
+import { Link, NavLink } from "react-router-dom"
+import Button from "../components/Button"
 
 const NavBar = () => {
 	const currentUser = useUser()
@@ -83,28 +84,52 @@ const NavBar = () => {
 		}
 	}
 
+	let activeClass =
+		" hover:bg-secondaryHover m-2 px-2 py-1/2 transition ease-in-out underline decoration-2 underline-offset-2 decoration-secondary"
+	let inactiveClass = "hover:underline m-2 px-2 py-1/2 transition ease-in-out"
+
 	return (
-		<div className='flex flex-row gap-x-2 bg-yellow-200'>
+		<div className='flex flex-row  bg-yellow-100 justify-between'>
 			<div>
+				<NavLink className={({ isActive }) => (isActive ? activeClass : inactiveClass)} to='/'>
+					Home
+				</NavLink>
+			</div>
+
+			<div>
+				<NavLink className={({ isActive }) => (isActive ? activeClass : inactiveClass)} to='/explore'>
+					Explore
+				</NavLink>
+				<NavLink className={({ isActive }) => (isActive ? activeClass : inactiveClass)} to='/block'>
+					Block
+				</NavLink>
+				<NavLink className={({ isActive }) => (isActive ? activeClass : inactiveClass)} to='/transaction'>
+					Transaction
+				</NavLink>
+			</div>
+
+			<div className='flex flex-row'>
 				{!currentUser?.address ? (
 					<>
 						<button onClick={connectWallet}>Connect</button>
 					</>
 				) : (
-					<div>
+					<>
+						<NavLink
+							className={({ isActive }) => (isActive ? activeClass : inactiveClass)}
+							to={`/narratives/${currentUser.address}`}
+						>
+							My Narratives
+						</NavLink>
+
+						<NavLink className={({ isActive }) => (isActive ? activeClass : inactiveClass)} to='/profile'>
+							<div className='w-20 truncate'> {currentUser.ens || currentUser.address}</div>
+						</NavLink>
+
 						<button onClick={signOut}>Sign Out</button>
-						<Link to='profile' className='truncate w-20'>
-							{currentUser.ens || currentUser.address}
-						</Link>
-						<Link to={`/narratives/${currentUser.address}`}>My Narratives</Link>
-					</div>
+					</>
 				)}
 			</div>
-
-			<Link to='/'>Home</Link>
-			<Link to='/block'>Block</Link>
-			<Link to='/transaction'>Transaction</Link>
-			<Link to='/narratives'>Explore</Link>
 		</div>
 	)
 }

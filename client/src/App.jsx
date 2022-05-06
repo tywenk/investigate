@@ -32,7 +32,7 @@ const App = () => {
 							<Route index element={<Home />}></Route>
 							<Route path='profile' element={<UserProfile />}></Route>
 							<Route path='narratives/:addr' element={<MyNarratives />}></Route>
-							<Route path='narratives' element={<AllNarratives />}></Route>
+							<Route path='explore' element={<AllNarratives />}></Route>
 							<Route path='block' element={<Block />}></Route>
 							<Route path='block/:narrId' element={<BlockUserNarratives />}></Route>
 							<Route path='block/:narrId/:blockNum' element={<BlockShow />}></Route>

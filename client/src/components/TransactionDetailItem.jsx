@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
 import Tiptap from "../components/Tiptap"
 import Button from "../components/Button"
+import AddNoteButton from "../components/AddNoteButton"
+import CopyClipboardButton from "../components/CopyClipboardButton"
 
 const TransactionDetailItem = ({ label, data, noteObjKey, canEdit, txNotes, setTxNotes }) => {
 	const [showNote, setShowNote] = useState(false)
@@ -36,19 +38,20 @@ const TransactionDetailItem = ({ label, data, noteObjKey, canEdit, txNotes, setT
 	}
 
 	return (
-		<div className='grid grid-cols-2 w-1/2 bg-slate-100 m-1 p-2 rounded-lg'>
-			<div className='truncate'>
-				{label} {data}
+		<div className='grid grid-cols-2 w-1/2 bg-primary m-1 p-2 rounded-lg'>
+			<div className='flex items-center truncate'>
+				<div className='truncate'>
+					{label} {data}
+				</div>
+				<CopyClipboardButton toCopy={data} />
 			</div>
 
-			{!showNote && canEdit ? (
-				<button onClick={handleShowNote} className='border m-2 p-2 rounded-xl'>
-					Add note
-				</button>
+			{canEdit && !showNote ? (
+				<AddNoteButton onCustomClick={handleShowNote}>Add note</AddNoteButton>
 			) : (
 				<div className={showNote ? "bg-slate-100 m-2 p-2 rounded-lg" : "hidden"}>
 					<Tiptap canEdit={canEdit} onNoteChange={handleOnNoteChange} content={txNotes?.[noteObjKey]} />
-					<Button customOnClick={handleDiscardNote}>Discard</Button>
+					{canEdit && <Button customOnClick={handleDiscardNote}>Discard</Button>}
 				</div>
 			)}
 		</div>

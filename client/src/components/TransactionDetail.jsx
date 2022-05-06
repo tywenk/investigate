@@ -1,15 +1,14 @@
 import { useState, useEffect } from "react"
 import { ethers } from "ethers"
 import TextareaAutosize from "react-textarea-autosize"
-import { useUser } from "../context/UserContext"
 import TransactionDetailItem from "../components/TransactionDetailItem"
 import Button from "../components/Button"
 import { useEtherscanContractData } from "../hooks/useEtherscanContractData"
+import TransactionDetailItemMore from "./TransactionDetailLogs"
 
-const TransactionDetail = ({ tx, alcProvider, txNotes, setTxNotes, currentTxNarrativeId, isShow }) => {
-	const [canEdit, setCanEdit] = useState(false)
-	const currentUser = useUser()
-	const { data: contractData, isSuccess, isLoading } = useEtherscanContractData(tx?.to || tx?.contractAddress)
+const TransactionDetail = ({ tx, canEdit, alcProvider, txNotes, setTxNotes, currentTxNarrativeId, isShow }) => {
+	const [contractData, setContractData] = useState(null)
+	const { data, isSuccess, isLoading } = useEtherscanContractData(tx?.to || tx?.contractAddress, setContractData)
 
 	const dataToShowArr = [
 		{ label: "From:", data: tx?.from, noteObjKey: "note_from" },
@@ -29,14 +28,6 @@ const TransactionDetail = ({ tx, alcProvider, txNotes, setTxNotes, currentTxNarr
 
 	// console.log("Contract:", contractData)
 	// console.log("Transaction:", tx)
-
-	useEffect(() => {
-		if (currentUser?.transaction_narratives?.some((tx) => tx.id === parseInt(currentTxNarrativeId)) && !isShow) {
-			setCanEdit(true)
-		} else {
-			!canEdit && setCanEdit(false)
-		}
-	}, [tx, currentUser, currentTxNarrativeId, isShow])
 
 	return (
 		<div>
@@ -62,12 +53,14 @@ const TransactionDetail = ({ tx, alcProvider, txNotes, setTxNotes, currentTxNarr
 					}
 				})}
 
-				{tx?.contractAddress && <div>Contract Address: {tx?.contractAddress}</div>}
+				{/* <TransactionDetailItemMore tx={tx} contractData={contractData} /> */}
 
 				{isSuccess &&
 					contractData?.result?.map((r, index) => {
 						return (
 							<div key={r.ContractName + index}>
+								{tx?.contractAddress && <div>Contract Address: {tx?.contractAddress}</div>}
+
 								{r.ABI === "Contract source code not verified" ? (
 									<></>
 								) : (

@@ -8,6 +8,7 @@ import BlockTxMore from "../components/BlockTxMore"
 const BlockTx = ({ tx, blockNotes, setBlockNotes, currentBlockNarrativeId, isShow }) => {
 	const [showNote, setShowNote] = useState(false)
 	const [isShowMore, setIsShowMore] = useState(false)
+	const [noteContent, setNoteContent] = useState("")
 	const [canEdit, setCanEdit] = useState(false)
 	const noteInputRef = useRef()
 	const currentUser = useUser()
@@ -19,29 +20,36 @@ const BlockTx = ({ tx, blockNotes, setBlockNotes, currentBlockNarrativeId, isSho
 	// }, [showNote])
 
 	useEffect(() => {
-		if (blockNotes?.[tx?.hash]?.note && showNote !== true) {
+		if (noteContent) {
+			setBlockNotes((prevBlockNotes) => {
+				return {
+					...prevBlockNotes,
+					[tx?.hash]: {
+						id: [tx?.hash]?.id,
+						label: [tx?.hash]?.label,
+						tx_hash: tx?.hash,
+						block_narrative_id: parseInt(currentBlockNarrativeId),
+						note: noteContent,
+					},
+				}
+			})
+		}
+	}, [noteContent])
+
+	useEffect(() => {
+		if (showNote !== true && blockNotes?.[tx?.hash]?.note) {
 			setShowNote(true)
 		}
 
-		if (currentUser?.block_narratives?.some((bn) => bn.id === parseInt(currentBlockNarrativeId)) && !isShow) {
+		if (currentUser?.block_narratives?.some((bn) => parseInt(bn.id) === parseInt(currentBlockNarrativeId)) && !isShow) {
 			setCanEdit(true)
 		} else {
 			!canEdit && setCanEdit(false)
 		}
 	}, [blockNotes, currentUser, currentBlockNarrativeId, isShow, showNote, canEdit, tx?.hash])
 
-	const handleOnNoteChange = (noteContent) => {
-		setBlockNotes((prevBlockNotes) => {
-			return {
-				...prevBlockNotes,
-				[tx?.hash]: {
-					...prevBlockNotes?.[tx?.hash],
-					tx_hash: tx?.hash,
-					block_narrative_id: currentBlockNarrativeId,
-					note: noteContent,
-				},
-			}
-		})
+	const handleOnNoteChange = (noteStr) => {
+		setNoteContent(noteStr)
 	}
 
 	const handleShowNote = () => {
@@ -88,18 +96,6 @@ const BlockTx = ({ tx, blockNotes, setBlockNotes, currentBlockNarrativeId, isSho
 				</button>
 			) : (
 				<div className={showNote ? "bg-slate-100 m-2 p-2 rounded-lg" : "hidden"}>
-					{/* <form>
-						<TextareaAutosize
-							ref={noteInputRef}
-							minRows={2}
-							maxRows={6}
-							className='w-full rounded-md resize-none p-2'
-							placeholder='Add a note...'
-							value={blockNotes?.[tx?.hash]?.note}
-							onChange={handleOnNoteChange}
-							readOnly={canEdit ? false : true}
-						/>
-					</form> */}
 					<Tiptap canEdit={canEdit} onNoteChange={handleOnNoteChange} content={blockNotes?.[tx?.hash]?.note} />
 
 					{canEdit && <Button customOnClick={handleDiscardNote}>Discard</Button>}
