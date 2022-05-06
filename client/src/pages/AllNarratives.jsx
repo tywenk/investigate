@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom"
 import dayjs from "dayjs"
 import { useAllNarrativesData } from "../hooks/useAllNarrativesData"
 import Tiptap from "../components/Tiptap"
+import { FiArrowRight } from "react-icons/fi"
 
 const AllNarratives = () => {
 	const { data } = useAllNarrativesData()
@@ -42,7 +43,12 @@ const AllNarratives = () => {
 									)
 								})}
 							</div>
-							<button onClick={() => handleOnClick("block", block.id, block.block.block_num)}>Open</button>
+							<button onClick={() => handleOnClick("block", block.id, block.block.block_num)}>
+								<div className='flex'>
+									Open
+									<FiArrowRight />
+								</div>
+							</button>
 						</div>
 					)
 				})}

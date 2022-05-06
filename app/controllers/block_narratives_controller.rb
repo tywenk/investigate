@@ -17,5 +17,11 @@ class BlockNarrativesController < ApplicationController
 		render json: block_narrative
 	end
 
+	def destroy
+		block_narrative = BlockNarrative.find_by(id: params[:id])
+		block_narrative.destroy
+		head :no_content
+	end
+
 	private
 end

@@ -16,6 +16,12 @@ class TransactionNarrativesController < ApplicationController
 		render json: txNarr
 	end
 
+	def destroy
+		txNarr = TransactionNarrative.find_by(id: params[:id])
+		txNarr.destroy
+		head :no_content
+	end
+
 	private
 
 	def transaction_narr_params

@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom"
 import Tiptap from "../components/Tiptap"
 import dayjs from "dayjs"
-import { useUserNarrativesData } from "../hooks/useUserNarrativesData"
+import { useUserNarrativesData, useDeleteUserNarrative } from "../hooks/useUserNarrativesData"
 
 const UserNarratives = () => {
 	const { data, isLoading } = useUserNarrativesData()
+	const { mutate: deleteData, isLoading: isDeleting } = useDeleteUserNarrative()
 	const navigate = useNavigate()
 
 	console.log(data)
@@ -21,6 +22,10 @@ const UserNarratives = () => {
 	const handleOnClick = (base, narritiveId, hashOrNum) => {
 		console.log("click")
 		navigate(`/${base}/${narritiveId}/${hashOrNum}/edit`)
+	}
+
+	const handleDelete = (endpoint, id) => {
+		deleteData({ endpoint, id })
 	}
 
 	if (isLoading) {
@@ -49,6 +54,7 @@ const UserNarratives = () => {
 										})}
 									</div>
 									<button onClick={() => handleOnClick("block", block.id, block.block.block_num)}>Open</button>
+									<button onClick={() => handleDelete("block_narratives", block.id)}>Delete</button>
 								</div>
 							)
 						})}
@@ -71,6 +77,7 @@ const UserNarratives = () => {
 									})}
 								</div>
 								<button onClick={() => handleOnClick("transaction", txn.id, txn.txn.txn_hash)}>Open</button>
+								<button onClick={() => handleDelete("transaction_narratives", txn.id)}>Delete</button>
 							</div>
 						)
 					})}
