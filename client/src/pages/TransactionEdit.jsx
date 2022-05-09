@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
 import { useAlchemy } from "../context/AlchemyContext"
-import { useUser } from "../context/UserContext"
+import { useUser, useUserUpdate } from "../context/UserContext"
 import { useTransactionNotesData, usePostTransactionNotesData } from "../hooks/useTransactionNotesData"
 import _ from "lodash"
 import Button from "../components/Button"
@@ -15,8 +15,10 @@ const TransactionEdit = ({ isShow = false }) => {
 	const { txHash: currentTxHash, narrId: currentTxNarrativeId } = useParams()
 	const alcProvider = useAlchemy()
 	const currentUser = useUser()
+	const updateCurrentUser = useUserUpdate()
 
 	const { data } = useTransactionNotesData(currentTxNarrativeId, setTxNotes)
+	console.log(data)
 	const { mutate: postNotesData, isLoading: isPosting } = usePostTransactionNotesData()
 
 	useEffect(() => {
@@ -43,7 +45,16 @@ const TransactionEdit = ({ isShow = false }) => {
 		} else {
 			!canEdit && setCanEdit(false)
 		}
-	}, [txData, currentUser, currentTxNarrativeId, isShow])
+	}, [currentUser, currentTxNarrativeId])
+
+	useEffect(() => {
+		if (Object.keys(currentUser).length > 0 && data) {
+			updateCurrentUser((currUserData) => ({
+				...currUserData,
+				transaction_narratives: [...currUserData?.transaction_narratives, data],
+			}))
+		}
+	}, [data])
 
 	const handlePostNotes = async () => {
 		postNotesData(txNotes)
@@ -57,7 +68,7 @@ const TransactionEdit = ({ isShow = false }) => {
 		return (
 			<div>
 				<div>Invalid Transaction Input</div>
-				<Link to='/transaction'>Try again</Link>
+				<Link to='/transaction'>Try again</Link> p
 			</div>
 		)
 	}

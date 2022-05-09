@@ -20,9 +20,12 @@ code {
 	margin-top: 0.75em;
 }
 
-.ProseMirror ul,
+.ProseMirror ul {
+	@apply list-disc pl-5;
+}
+
 .ProseMirror ol {
-	padding: 0 1rem;
+	@apply list-decimal pl-5;
 }
 
 .ProseMirror h1 {
@@ -30,15 +33,11 @@ code {
 }
 
 .ProseMirror code {
-	@apply border-2 rounded-md bg-gray-200 text-gray-600;
+	@apply p-1 rounded-md bg-gray-200 text-sm text-gray-600;
 }
 
 .ProseMirror pre {
-	background: #0d0d0d;
-	color: #fff;
-	font-family: "JetBrainsMono", monospace;
-	padding: 0.75rem 1rem;
-	border-radius: 0.5rem;
+	@apply bg-stone-500 p-1 pl-3 text-white font-mono text-sm;
 }
 .ProseMirror pre code {
 	color: inherit;

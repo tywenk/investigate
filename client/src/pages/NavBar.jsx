@@ -85,11 +85,12 @@ const NavBar = () => {
 	}
 
 	let activeClass =
-		" hover:bg-secondaryHover m-2 px-2 py-1/2 transition ease-in-out underline decoration-2 underline-offset-2 decoration-secondary"
-	let inactiveClass = "hover:underline m-2 px-2 py-1/2 transition ease-in-out"
+		" m-2 px-2 py-1/2 transition ease-in-out underline decoration-2 underline-offset-2 decoration-secondary"
+	let inactiveClass =
+		"hover:underline decoration-2 underline-offset-2 decoration-secondary m-2 px-2 py-1/2 transition ease-in-out"
 
 	return (
-		<div className='flex flex-row  bg-yellow-100 justify-between'>
+		<div className='sticky top-0 flex flex-row justify-between bg-yellow-100'>
 			<div>
 				<NavLink className={({ isActive }) => (isActive ? activeClass : inactiveClass)} to='/'>
 					Home
@@ -108,13 +109,13 @@ const NavBar = () => {
 				</NavLink>
 			</div>
 
-			<div className='flex flex-row'>
+			<div>
 				{!currentUser?.address ? (
-					<>
+					<div>
 						<button onClick={connectWallet}>Connect</button>
-					</>
+					</div>
 				) : (
-					<>
+					<div className='flex flex-row'>
 						<NavLink
 							className={({ isActive }) => (isActive ? activeClass : inactiveClass)}
 							to={`/narratives/${currentUser.address}`}
@@ -126,8 +127,13 @@ const NavBar = () => {
 							<div className='w-20 truncate'> {currentUser.ens || currentUser.address}</div>
 						</NavLink>
 
-						<button onClick={signOut}>Sign Out</button>
-					</>
+						<button
+							onClick={signOut}
+							className='hover:underline decoration-2 underline-offset-2 decoration-secondary m-2 px-2 py-1/2 transition ease-in-out'
+						>
+							Sign Out
+						</button>
+					</div>
 				)}
 			</div>
 		</div>

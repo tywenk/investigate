@@ -3,7 +3,7 @@ import Tiptap from "../components/Tiptap"
 import dayjs from "dayjs"
 import { useUserNarrativesData, useDeleteUserNarrative } from "../hooks/useUserNarrativesData"
 
-const UserNarratives = () => {
+const UserNarratives = ({ canEdit = true }) => {
 	const { data, isLoading } = useUserNarrativesData()
 	const { mutate: deleteData, isLoading: isDeleting } = useDeleteUserNarrative()
 	const navigate = useNavigate()
@@ -21,7 +21,7 @@ const UserNarratives = () => {
 
 	const handleOnClick = (base, narritiveId, hashOrNum) => {
 		console.log("click")
-		navigate(`/${base}/${narritiveId}/${hashOrNum}/edit`)
+		canEdit ? navigate(`/${base}/${narritiveId}/${hashOrNum}/edit`) : navigate(`/${base}/${narritiveId}/${hashOrNum}`)
 	}
 
 	const handleDelete = (endpoint, id) => {
@@ -29,7 +29,7 @@ const UserNarratives = () => {
 	}
 
 	if (isLoading) {
-		return <div className=''>Loading you narratives...</div>
+		return <div className=''>Loading narratives...</div>
 	}
 
 	return (
@@ -53,34 +53,41 @@ const UserNarratives = () => {
 											)
 										})}
 									</div>
-									<button onClick={() => handleOnClick("block", block.id, block.block.block_num)}>Open</button>
-									<button onClick={() => handleDelete("block_narratives", block.id)}>Delete</button>
+									<button onClick={() => handleOnClick("block", block.id, block.block.block_num)}>Edit</button>
+									{canEdit && (
+										<button onClick={() => handleDelete("block_narratives", block.id)}>
+											{isDeleting ? <span>Deleting...</span> : <span>Delete</span>}
+										</button>
+									)}
 								</div>
 							)
 						})}
 				</div>
 			</div>
 			<div>
-				{data?.txn_narrs &&
-					data?.txn_narrs.map((txn, index) => {
-						return (
-							<div key={txn.txn.txn_hash + index} className='bg-green-100 m-1 p-2 rounded-lg'>
-								<div>Hash: {txn.txn.txn_hash}</div>
-								<div>
-									{txnNoteAttributes.map((attr, index) => {
-										return (
-											<div key={attr + index}>
-												{txn?.[attr] && <div>{attr}</div>}
-												{txn?.[attr] && <Tiptap canEdit={false} content={txn?.[attr]} />}
-											</div>
-										)
-									})}
+				<h1>Transactions</h1>
+				<div className='flex flex-row overflow-x-auto'>
+					{data?.txn_narrs &&
+						data?.txn_narrs.map((txn, index) => {
+							return (
+								<div key={txn.txn.txn_hash + index} className='bg-green-100 m-1 p-2 rounded-lg w-1/5'>
+									<div className='truncate'>Hash: {txn.txn.txn_hash}</div>
+									<div>
+										{txnNoteAttributes.map((attr, index) => {
+											return (
+												<div key={attr + index}>
+													{txn?.[attr] && <div>{attr}</div>}
+													{txn?.[attr] && <Tiptap canEdit={false} content={txn?.[attr]} />}
+												</div>
+											)
+										})}
+									</div>
+									<button onClick={() => handleOnClick("transaction", txn.id, txn.txn.txn_hash)}>Edit</button>
+									{canEdit && <button onClick={() => handleDelete("transaction_narratives", txn.id)}>Delete</button>}
 								</div>
-								<button onClick={() => handleOnClick("transaction", txn.id, txn.txn.txn_hash)}>Open</button>
-								<button onClick={() => handleDelete("transaction_narratives", txn.id)}>Delete</button>
-							</div>
-						)
-					})}
+							)
+						})}
+				</div>
 			</div>
 		</div>
 	)

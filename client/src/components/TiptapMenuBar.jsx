@@ -1,11 +1,20 @@
+import { useCallback } from "react"
 import { FiCode } from "react-icons/fi"
 import { BsTextParagraph, BsCodeSquare } from "react-icons/bs"
 import { MdFormatListBulleted, MdFormatListNumbered } from "react-icons/md"
 import { IoTextOutline } from "react-icons/io5"
 import { GrBlockQuote } from "react-icons/gr"
-import { BiText, BiItalic, BiStrikethrough, BiBold } from "react-icons/bi"
+import { BiText, BiItalic, BiStrikethrough, BiBold, BiImage } from "react-icons/bi"
 
 const TiptapMenuBar = ({ editor }) => {
+	const addImage = useCallback(() => {
+		const url = window.prompt("URL")
+
+		if (url) {
+			editor.chain().focus().setImage({ src: url }).run()
+		}
+	}, [editor])
+
 	if (!editor) {
 		return null
 	}
@@ -113,6 +122,16 @@ const TiptapMenuBar = ({ editor }) => {
 				}
 			>
 				<GrBlockQuote />
+			</button>
+			<button
+				onClick={addImage}
+				className={
+					editor.isActive("blockquote")
+						? "border border-blue-500 rounded-xl mx-0.5 px-1.5 py-0.5 bg-secondary hover:bg-secondaryHover"
+						: "border border-blue-300 rounded-xl mx-0.5 px-1.5 py-0.5 hover:bg-secondary"
+				}
+			>
+				<BiImage />
 			</button>
 		</>
 	)

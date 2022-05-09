@@ -34,6 +34,7 @@ class TransactionNarrativesController < ApplicationController
 			:note_gas_used,
 			:note_effective_gas_price,
 			:note_logs,
+			:note_value,
 			:investigation_id,
 			:txn_id,
 		)

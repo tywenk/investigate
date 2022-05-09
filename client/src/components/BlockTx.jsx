@@ -1,17 +1,14 @@
 import { ethers } from "ethers"
 import { useState, useRef, useEffect } from "react"
-import { useUser } from "../context/UserContext"
 import Tiptap from "../components/Tiptap"
 import Button from "../components/Button"
 import BlockTxMore from "../components/BlockTxMore"
 
-const BlockTx = ({ tx, blockNotes, setBlockNotes, currentBlockNarrativeId, isShow }) => {
+const BlockTx = ({ tx, blockNotes, setBlockNotes, currentBlockNarrativeId, isShow, canEdit }) => {
 	const [showNote, setShowNote] = useState(false)
 	const [isShowMore, setIsShowMore] = useState(false)
 	const [noteContent, setNoteContent] = useState("")
-	const [canEdit, setCanEdit] = useState(false)
 	const noteInputRef = useRef()
-	const currentUser = useUser()
 
 	// useEffect(() => {
 	// 	if (showNote === true) {
@@ -40,13 +37,7 @@ const BlockTx = ({ tx, blockNotes, setBlockNotes, currentBlockNarrativeId, isSho
 		if (showNote !== true && blockNotes?.[tx?.hash]?.note) {
 			setShowNote(true)
 		}
-
-		if (currentUser?.block_narratives?.some((bn) => parseInt(bn.id) === parseInt(currentBlockNarrativeId)) && !isShow) {
-			setCanEdit(true)
-		} else {
-			!canEdit && setCanEdit(false)
-		}
-	}, [blockNotes, currentUser, currentBlockNarrativeId, isShow, showNote, canEdit, tx?.hash])
+	}, [blockNotes, showNote, tx])
 
 	const handleOnNoteChange = (noteStr) => {
 		setNoteContent(noteStr)

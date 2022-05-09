@@ -70,7 +70,7 @@ const StartInputForm = ({ endpoint, route }) => {
 		<div>
 			<form onSubmit={handleSubmit}>
 				<input
-					className='bg-blue-300 rounded-md'
+					className='bg-blue-300 rounded-md focus:outline-none'
 					type='text'
 					placeholder={formType}
 					value={formContent}

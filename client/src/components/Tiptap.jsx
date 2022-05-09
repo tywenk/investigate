@@ -1,11 +1,12 @@
 import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
 import TiptapMenuBar from "./TiptapMenuBar"
+import Image from "@tiptap/extension-image"
 import { BiText, BiItalic, BiStrikethrough } from "react-icons/bi"
 
 const Tiptap = ({ canEdit, onNoteChange, content }) => {
 	const editor = useEditor({
-		extensions: [StarterKit],
+		extensions: [StarterKit, Image],
 		content: content,
 		onUpdate({ editor }) {
 			onNoteChange(editor.getHTML())
@@ -15,7 +16,7 @@ const Tiptap = ({ canEdit, onNoteChange, content }) => {
 	})
 
 	return (
-		<>
+		<div className='focus:outline-none focus:ring focus:ring-violet-300'>
 			{/* {editor && (
 				<BubbleMenu editor={editor} tippyOptions={{ duration: 100 }} className='bg-white rounded-xl p-1'>
 					<button
@@ -51,8 +52,8 @@ const Tiptap = ({ canEdit, onNoteChange, content }) => {
 				</BubbleMenu>
 			)} */}
 			{canEdit && <TiptapMenuBar editor={editor} />}
-			<EditorContent editor={editor} className='bg-white p-1 m-1 rounded-lg ' />
-		</>
+			<EditorContent editor={editor} className='bg-white p-1 m-1 rounded-md' />
+		</div>
 	)
 }
 

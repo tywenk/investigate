@@ -7,6 +7,7 @@ class TransactionNarrativeSerializer < ActiveModel::Serializer
 	           :note_gas_used,
 	           :note_effective_gas_price,
 	           :note_logs,
+	           :note_value,
 	           :created_at,
 	           :updated_at
 	has_one :investigation

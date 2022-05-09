@@ -6,13 +6,18 @@ import BlockMetadata from "../components/BlockMetadata"
 import BlockTx from "../components/BlockTx"
 import Button from "../components/Button"
 import _ from "lodash"
+import { useUser, useUserUpdate } from "../context/UserContext"
+import dayjs from "dayjs"
 
 const BlockEdit = ({ isShow = false }) => {
 	const [blockData, setBlockData] = useState({})
 	const [blockNotes, setBlockNotes] = useState({})
 	const [isInvalidBlock, setIsInvalidBlock] = useState(false)
+	const [canEdit, setCanEdit] = useState(false)
 	const { blockNum: currentBlockNum, narrId: currentBlockNarrativeId } = useParams()
 	const alcProvider = useAlchemy()
+	const currentUser = useUser()
+	const updateCurrentUser = useUserUpdate()
 
 	const { data } = useBlockNotesData(currentBlockNarrativeId, setBlockNotes)
 	const { mutate: postNotesData, isLoading: isPosting } = usePostBlockNotesData()
@@ -34,6 +39,27 @@ const BlockEdit = ({ isShow = false }) => {
 			data()
 		}
 	}, [currentBlockNum, alcProvider])
+
+	useEffect(() => {
+		if (currentUser?.block_narratives?.some((bn) => parseInt(bn.id) === parseInt(currentBlockNarrativeId)) && !isShow) {
+			setCanEdit(true)
+		} else {
+			!canEdit && setCanEdit(false)
+		}
+	}, [currentUser, currentBlockNarrativeId])
+
+	useEffect(() => {
+		if (Object.keys(currentUser).length > 0 && data) {
+			console.log(data)
+			updateCurrentUser((currUserData) => ({
+				...currUserData,
+				block_narratives: [
+					...currUserData?.block_narratives,
+					{ id: currentBlockNarrativeId, created_at: dayjs().format(), updated_at: dayjs().format() },
+				],
+			}))
+		}
+	}, [data])
 
 	const handlePostNotes = async () => {
 		postNotesData(blockNotes)
@@ -58,9 +84,11 @@ const BlockEdit = ({ isShow = false }) => {
 
 	return (
 		<div>
-			<Button>
-				<Link to='/block'>New Block</Link>
-			</Button>
+			{!isShow && (
+				<Button>
+					<Link to='/block'>New Block</Link>
+				</Button>
+			)}
 
 			<BlockMetadata
 				blockNumber={blockData?.number}
@@ -73,11 +101,16 @@ const BlockEdit = ({ isShow = false }) => {
 				extraData={blockData?.extraData?.toString()}
 			/>
 
-			<div>
-				<Button customOnClick={handlePostNotes}>Save</Button>
-				{isPosting ? <span>Saving...</span> : <></>}
-				{_.isEqual(data, blockNotes) ? <span></span> : <span>Unsaved changes</span>}
-			</div>
+			{!isShow && (
+				<div>
+					<Button customOnClick={handlePostNotes}>Save</Button>
+					{isPosting ? (
+						<span>Saving...</span>
+					) : (
+						<>{_.isEqual(data, blockNotes) ? <span></span> : <span>Unsaved changes</span>}</>
+					)}
+				</div>
+			)}
 
 			{blockData.transactions.map((tx) => {
 				return (
@@ -88,6 +121,7 @@ const BlockEdit = ({ isShow = false }) => {
 						setBlockNotes={setBlockNotes}
 						currentBlockNarrativeId={currentBlockNarrativeId}
 						isShow={isShow}
+						canEdit={canEdit}
 					/>
 				)
 			})}

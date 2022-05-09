@@ -5,6 +5,7 @@ module.exports = {
 			colors: {
 				darkPrimary: "",
 				primary: "#ded7d3", //brown
+				primaryBorder: "",
 				primaryHover: "#ada49e", //darkerbrown
 				secondary: "#99cff0", //blue
 				secondaryHover: "#c6e5f7", //light blue
@@ -16,5 +17,5 @@ module.exports = {
 			},
 		},
 	},
-	plugins: [],
+	plugins: [require("tailwind-scrollbar")],
 }

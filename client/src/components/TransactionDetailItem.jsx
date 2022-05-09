@@ -38,7 +38,7 @@ const TransactionDetailItem = ({ label, data, noteObjKey, canEdit, txNotes, setT
 	}
 
 	return (
-		<div className='grid grid-cols-2 w-1/2 bg-primary m-1 p-2 rounded-lg'>
+		<div className='grid grid-cols-2 w-1/2 bg-stone-200 m-1 p-2 rounded-lg'>
 			<div className='flex items-center truncate'>
 				<div className='truncate'>
 					{label} {data}

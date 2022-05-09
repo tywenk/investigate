@@ -4,6 +4,7 @@ const onGetSuccess = (data, setBlockNotes) => {
 	setBlockNotes(data)
 	console.log("success fetching block notes: ", data)
 }
+
 const onError = (error) => {
 	console.log("error fetching block data", error)
 }
