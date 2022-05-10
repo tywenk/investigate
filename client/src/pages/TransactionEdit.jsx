@@ -108,6 +108,12 @@ const TransactionEdit = ({ isShow = false }) => {
 					</div>
 				</div>
 
+				<div class='relative flex py-1 items-center'>
+					<div class='flex-grow border-t border-gray-400'></div>
+					<span class='flex-shrink mx-2 text-gray-400'>Content</span>
+					<div class='flex-grow border-t border-gray-400'></div>
+				</div>
+
 				{canEdit && (
 					<div className='flex flex-row space-between'>
 						<div>

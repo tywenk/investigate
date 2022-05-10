@@ -8,7 +8,6 @@ import Button from "../components/Button"
 const NavBar = () => {
 	const currentUser = useUser()
 	const handleSetUser = useUserUpdate()
-
 	const domain = window.location.host
 	const origin = window.location.origin
 	const provider = new ethers.providers.Web3Provider(window.ethereum)
@@ -36,7 +35,7 @@ const NavBar = () => {
 			address,
 			statement,
 			uri: origin,
-			version: "1",
+			version: "1.0.0",
 			chainId: "1",
 			nonce: response.nonce,
 		})
@@ -84,18 +83,19 @@ const NavBar = () => {
 		}
 	}
 
-	let activeClass = "bg-stone-300 hover:bg-stone-100 rounded-xl border border-primary p-2 mx-1 transition ease-in-out"
-	let inactiveClass = "hover:bg-stone-100 border border-primary rounded-xl p-2 mx-1 transition ease-in-out"
+	let activeClass = "bg-stone-100 text-black border border-stone-200 rounded-xl px-2 py-1 mx-1 transition ease-in-out"
+	let inactiveClass =
+		"bg-stone-500 text-white hover:bg-stone-100 hover:text-black border border-stone-400 hover:border-stone-200 rounded-xl px-2 py-1 mx-1 transition ease-in-out"
 
 	return (
 		<div className='fixed top-0 w-full flex flex-row justify-between bg-gradient-to-r from-primaryHover to-primary rounded-xl border border-primary p-2'>
-			<div>
+			<div className='flex flex-row'>
 				<NavLink className={({ isActive }) => (isActive ? activeClass : inactiveClass)} to='/'>
 					Home
 				</NavLink>
 			</div>
 
-			<div>
+			<div className='flex flex-row'>
 				<NavLink className={({ isActive }) => (isActive ? activeClass : inactiveClass)} to='/explore'>
 					Explore
 				</NavLink>
@@ -108,34 +108,25 @@ const NavBar = () => {
 			</div>
 
 			{!currentUser?.address ? (
-				<div className='hover:bg-stone-100 border border-primary rounded-xl p-2 mx-1 transition ease-in-out'>
+				<div className={inactiveClass}>
 					<button onClick={connectWallet}>Connect</button>
 				</div>
 			) : (
 				<div className='flex flex-row'>
-					<div>
-						<NavLink
-							className={({ isActive }) => (isActive ? activeClass : inactiveClass)}
-							to={`/narratives/${currentUser.address}`}
-						>
-							My Narratives
-						</NavLink>
-					</div>
+					<NavLink
+						className={({ isActive }) => (isActive ? activeClass : inactiveClass)}
+						to={`/narratives/${currentUser.address}`}
+					>
+						My Narratives
+					</NavLink>
 
-					<div>
-						<NavLink className={({ isActive }) => (isActive ? activeClass : inactiveClass)} to='/profile'>
-							<div className='w-20 truncate'> {currentUser.ens || currentUser.address}</div>
-						</NavLink>
-					</div>
+					<NavLink className={({ isActive }) => (isActive ? activeClass : inactiveClass)} to='/profile'>
+						<span className='w-20 truncate'> {currentUser.ens || currentUser.address}</span>
+					</NavLink>
 
-					<div>
-						<button
-							onClick={signOut}
-							className='hover:bg-stone-100 border border-primary rounded-xl p-2 mx-1 transition ease-in-out'
-						>
-							Sign Out
-						</button>
-					</div>
+					<button onClick={signOut} className={inactiveClass}>
+						Sign Out
+					</button>
 				</div>
 			)}
 		</div>
