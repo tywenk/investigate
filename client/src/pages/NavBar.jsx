@@ -84,13 +84,11 @@ const NavBar = () => {
 		}
 	}
 
-	let activeClass =
-		" m-2 px-2 py-1/2 transition ease-in-out underline decoration-2 underline-offset-2 decoration-secondary"
-	let inactiveClass =
-		"hover:underline decoration-2 underline-offset-2 decoration-secondary m-2 px-2 py-1/2 transition ease-in-out"
+	let activeClass = "bg-stone-300 hover:bg-stone-100 rounded-xl border border-primary p-2 mx-1 transition ease-in-out"
+	let inactiveClass = "hover:bg-stone-100 border border-primary rounded-xl p-2 mx-1 transition ease-in-out"
 
 	return (
-		<div className='sticky top-0 flex flex-row justify-between bg-yellow-100'>
+		<div className='fixed top-0 w-full flex flex-row justify-between bg-gradient-to-r from-primaryHover to-primary rounded-xl border border-primary p-2'>
 			<div>
 				<NavLink className={({ isActive }) => (isActive ? activeClass : inactiveClass)} to='/'>
 					Home
@@ -109,33 +107,37 @@ const NavBar = () => {
 				</NavLink>
 			</div>
 
-			<div>
-				{!currentUser?.address ? (
+			{!currentUser?.address ? (
+				<div className='hover:bg-stone-100 border border-primary rounded-xl p-2 mx-1 transition ease-in-out'>
+					<button onClick={connectWallet}>Connect</button>
+				</div>
+			) : (
+				<div className='flex flex-row'>
 					<div>
-						<button onClick={connectWallet}>Connect</button>
-					</div>
-				) : (
-					<div className='flex flex-row'>
 						<NavLink
 							className={({ isActive }) => (isActive ? activeClass : inactiveClass)}
 							to={`/narratives/${currentUser.address}`}
 						>
 							My Narratives
 						</NavLink>
+					</div>
 
+					<div>
 						<NavLink className={({ isActive }) => (isActive ? activeClass : inactiveClass)} to='/profile'>
 							<div className='w-20 truncate'> {currentUser.ens || currentUser.address}</div>
 						</NavLink>
+					</div>
 
+					<div>
 						<button
 							onClick={signOut}
-							className='hover:underline decoration-2 underline-offset-2 decoration-secondary m-2 px-2 py-1/2 transition ease-in-out'
+							className='hover:bg-stone-100 border border-primary rounded-xl p-2 mx-1 transition ease-in-out'
 						>
 							Sign Out
 						</button>
 					</div>
-				)}
-			</div>
+				</div>
+			)}
 		</div>
 	)
 }

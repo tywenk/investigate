@@ -52,7 +52,7 @@ const Tiptap = ({ canEdit, onNoteChange, content }) => {
 				</BubbleMenu>
 			)} */}
 			{canEdit && <TiptapMenuBar editor={editor} />}
-			<EditorContent editor={editor} className='bg-white p-1 m-1 rounded-md' />
+			<EditorContent editor={editor} className='bg-white p-1 m-1 rounded-md w-full' />
 		</div>
 	)
 }

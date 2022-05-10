@@ -6,6 +6,8 @@ import { useTransactionNotesData, usePostTransactionNotesData } from "../hooks/u
 import _ from "lodash"
 import Button from "../components/Button"
 import TransactionDetail from "../components/TransactionDetail"
+import { FiArrowLeft } from "react-icons/fi"
+import CopyClipboardButton from "../components/CopyClipboardButton"
 
 const TransactionEdit = ({ isShow = false }) => {
 	const [txData, setTxData] = useState({})
@@ -18,8 +20,8 @@ const TransactionEdit = ({ isShow = false }) => {
 	const updateCurrentUser = useUserUpdate()
 
 	const { data } = useTransactionNotesData(currentTxNarrativeId, setTxNotes)
-	console.log(data)
-	const { mutate: postNotesData, isLoading: isPosting } = usePostTransactionNotesData()
+	console.log(txData)
+	const { mutate: postNotesData, isLoading: isPosting, isSuccess } = usePostTransactionNotesData()
 
 	useEffect(() => {
 		const data = async () => {
@@ -78,29 +80,73 @@ const TransactionEdit = ({ isShow = false }) => {
 	}
 
 	return (
-		<div>
-			{canEdit && (
-				<>
-					{" "}
-					<Button>
-						<Link to='/transaction'>New Transaction</Link>
-					</Button>
-					<div>
-						<Button customOnClick={handlePostNotes}>Save</Button>
-						{isPosting ? <span>Posting...</span> : <></>}
-						{_.isEqual(data, txNotes) ? <span></span> : <span>Unsaved changes</span>}
+		<div className='h-screen bg-scroll bg-gradient-to-r from-primary to-primaryHover pt-20 pl-10 pr-10'>
+			<div className='w-36 sm:w-60 fixed flex flex-col bg-stone-200 p-2 rounded-lg border border-stone-400 h-auto'>
+				<div>
+					<div className='text-xs font-mono text-stone-500'>Transaction Hash</div>
+					<div className='flex items-center'>
+						<div className='truncate font-semibold '>{txData?.transactionHash}</div>
+						<CopyClipboardButton toCopy={txData?.transactionHash} />
 					</div>
-				</>
-			)}
-			<TransactionDetail
-				canEdit={canEdit}
-				tx={txData}
-				alcProvider={alcProvider}
-				currentTxNarrativeId={currentTxNarrativeId}
-				txNotes={txNotes}
-				setTxNotes={setTxNotes}
-				isShow={isShow}
-			/>
+					<div className='grid grid-cols-2'>
+						<div>
+							<div className='text-xs font-mono text-stone-500 mt-2'>Block Number</div>
+							<div className='truncate'>{txData?.blockNumber}</div>
+						</div>
+						<div>
+							<div className='text-xs font-mono text-stone-500 mt-2'>Index</div>
+							<div className='truncate'>{txData?.transactionIndex}</div>
+						</div>
+					</div>
+					<div className='text-xs font-mono text-stone-500 mt-2'>Status</div>
+					<div>
+						{txData?.status === 1 ? (
+							<span className='text-green-600'>Successful</span>
+						) : (
+							<span className='text-red-500'>Reverted</span>
+						)}
+					</div>
+				</div>
+
+				{canEdit && (
+					<div className='flex flex-row space-between'>
+						<div>
+							<Button customOnClick={handlePostNotes}>{isPosting ? <div>Saving...</div> : <div>Save</div>}</Button>
+							{_.isEqual(data, txNotes) ? (
+								isSuccess && (
+									<span className='rounded-md border bg-stone-300 border-stone-400 px-2 py-0.5 m-1 transition-opacity'>
+										Saved
+									</span>
+								)
+							) : (
+								<span className='rounded-md border bg-yellow-300 border-yellow-400 px-2 py-0.5 m-1'>
+									Unsaved changes
+								</span>
+							)}
+						</div>
+					</div>
+				)}
+				<div className='hover:underline pt-2'>
+					<Link to='/transaction'>
+						<div className='flex items-center'>
+							<FiArrowLeft />
+							New Transaction
+						</div>
+					</Link>
+				</div>
+			</div>
+
+			<div className='pl-36 sm:pl-64 self-end'>
+				<TransactionDetail
+					canEdit={canEdit}
+					tx={txData}
+					alcProvider={alcProvider}
+					currentTxNarrativeId={currentTxNarrativeId}
+					txNotes={txNotes}
+					setTxNotes={setTxNotes}
+					isShow={isShow}
+				/>
+			</div>
 		</div>
 	)
 }

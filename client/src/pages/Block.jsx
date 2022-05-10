@@ -15,7 +15,7 @@ const Block = () => {
 	}
 
 	return (
-		<div>
+		<div className='h-screen grid place-content-center bg-gradient-to-r from-primary to-primaryHover'>
 			<StartInputForm endpoint={"blocks"} route='block' />
 		</div>
 	)

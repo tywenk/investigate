@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import Button from "../components/Button"
 
 //endpoint is plural, route is singular
 const StartInputForm = ({ endpoint, route }) => {
@@ -67,17 +68,19 @@ const StartInputForm = ({ endpoint, route }) => {
 		navigate(`/${route}/${narrId}/${hashOrNum}/edit`)
 	}
 	return (
-		<div>
+		<div className='w-full'>
 			<form onSubmit={handleSubmit}>
 				<input
-					className='bg-blue-300 rounded-md focus:outline-none'
+					className='bg-stone-300 placeholder:text-stone-400 placeholder:italic rounded-md focus:outline-none p-1 w-2/3 sm:w-[300px]'
 					type='text'
 					placeholder={formType}
 					value={formContent}
 					onChange={(e) => setFormContent(e.target.value)}
 					autoFocus
 				></input>
-				<input type='submit' value='Enter' />
+				<Button className='hover:pointer'>
+					<input type='submit' value='Enter' />
+				</Button>
 			</form>
 		</div>
 	)
