@@ -28,7 +28,7 @@ const App = () => {
 			<UserProvider>
 				<AlchemyProvider>
 					<Router>
-						{window.ethereum ? <NavBar /> : <InstallMetaMaskButton />}
+						<NavBar />
 						<Routes>
 							<Route index element={<Home />}></Route>
 							<Route path='profile' element={<UserProfile />}></Route>

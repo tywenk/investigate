@@ -83,12 +83,13 @@ const NavBar = () => {
 		}
 	}
 
-	let activeClass = "bg-stone-100 text-black border border-stone-200 rounded-xl px-2 py-1 mx-1 transition ease-in-out"
+	let activeClass =
+		"bg-stone-100 text-black hover:shadow-lg hover:shadow-stone-300 border border-stone-200 rounded-xl px-2 py-1 mx-1 transition ease-in-out"
 	let inactiveClass =
-		"bg-stone-500 text-white hover:bg-stone-100 hover:text-black border border-stone-400 hover:border-stone-200 rounded-xl px-2 py-1 mx-1 transition ease-in-out"
+		"bg-stone-500 text-white hover:bg-stone-100 hover:text-black hover:shadow-lg hover:shadow-stone-300 border border-stone-400 hover:border-stone-200 rounded-xl px-2 py-1 mx-1 transition ease-in-out"
 
 	return (
-		<div className='fixed top-0 w-full flex flex-row justify-between bg-gradient-to-r from-primaryHover to-primary rounded-xl border border-primary p-2'>
+		<div className='fixed top-0 w-full flex flex-row justify-between bg-gradient-to-r from-primaryHover to-primary rounded-xl border border-primary p-2 shadow-md shadow-stone-400'>
 			<div className='flex flex-row'>
 				<NavLink className={({ isActive }) => (isActive ? activeClass : inactiveClass)} to='/'>
 					Home
@@ -113,20 +114,18 @@ const NavBar = () => {
 				</div>
 			) : (
 				<div className='flex flex-row'>
-					<NavLink
-						className={({ isActive }) => (isActive ? activeClass : inactiveClass)}
-						to={`/narratives/${currentUser.address}`}
-					>
-						My Narratives
-					</NavLink>
+					<div>
+						<NavLink
+							className={({ isActive }) => (isActive ? activeClass : inactiveClass)}
+							to={`/narratives/${currentUser.address}`}
+						>
+							<span className='w-20 truncate'> {currentUser.ens || currentUser.address}</span>
+						</NavLink>
 
-					<NavLink className={({ isActive }) => (isActive ? activeClass : inactiveClass)} to='/profile'>
-						<span className='w-20 truncate'> {currentUser.ens || currentUser.address}</span>
-					</NavLink>
-
-					<button onClick={signOut} className={inactiveClass}>
-						Sign Out
-					</button>
+						<button onClick={signOut} className={inactiveClass}>
+							Sign Out
+						</button>
+					</div>
 				</div>
 			)}
 		</div>

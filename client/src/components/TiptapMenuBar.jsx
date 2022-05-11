@@ -8,7 +8,7 @@ import { BiText, BiItalic, BiStrikethrough, BiBold, BiImage } from "react-icons/
 
 const TiptapMenuBar = ({ editor }) => {
 	const addImage = useCallback(() => {
-		const url = window.prompt("URL")
+		const url = window.prompt("Enter image URL")
 
 		if (url) {
 			editor.chain().focus().setImage({ src: url }).run()

@@ -1,5 +1,5 @@
 export const Home = () => {
-	return <div className='h-screen grid place-content-center bg-gradient-to-r from-primary to-primaryHover'></div>
+	return <div className='h-screen grid place-content-center'></div>
 }
 
 export default Home

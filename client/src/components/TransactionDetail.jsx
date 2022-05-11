@@ -2,7 +2,6 @@ import { useState, useEffect } from "react"
 import { ethers } from "ethers"
 import TextareaAutosize from "react-textarea-autosize"
 import TransactionDetailItem from "../components/TransactionDetailItem"
-import Button from "../components/Button"
 import CopyClipboardButton from "../components/CopyClipboardButton"
 import { useEtherscanContractData } from "../hooks/useEtherscanContractData"
 
@@ -43,7 +42,7 @@ const TransactionDetail = ({ tx, canEdit, alcProvider, txNotes, setTxNotes, curr
 	// console.log("Transaction:", tx)
 
 	return (
-		<div>
+		<div className='max-h-screen'>
 			<div>
 				{dataToShowArr.map((attr, index) => {
 					if (attr?.data) {
@@ -63,6 +62,7 @@ const TransactionDetail = ({ tx, canEdit, alcProvider, txNotes, setTxNotes, curr
 					}
 				})}
 
+				{/* Contract info */}
 				{isSuccess &&
 					contractData?.result?.map((r, index) => {
 						return (
@@ -98,6 +98,7 @@ const TransactionDetail = ({ tx, canEdit, alcProvider, txNotes, setTxNotes, curr
 						)
 					})}
 
+				{/* Logs */}
 				{isSuccess && iface && (
 					<TransactionDetailItem noteObjKey='note_logs' canEdit={canEdit} txNotes={txNotes} setTxNotes={setTxNotes}>
 						<div className='text-xs font-mono text-stone-500'>Logs</div>

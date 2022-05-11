@@ -8,6 +8,8 @@ import Button from "../components/Button"
 import _ from "lodash"
 import { useUser, useUserUpdate } from "../context/UserContext"
 import dayjs from "dayjs"
+import { FiArrowLeft } from "react-icons/fi"
+import { useDeleteUserNarrative } from "../hooks/useUserNarrativesData"
 
 const BlockEdit = ({ isShow = false }) => {
 	const [blockData, setBlockData] = useState({})
@@ -18,19 +20,23 @@ const BlockEdit = ({ isShow = false }) => {
 	const alcProvider = useAlchemy()
 	const currentUser = useUser()
 	const updateCurrentUser = useUserUpdate()
+	const { mutate: deleteData, isLoading: isDeleting } = useDeleteUserNarrative()
 
 	const { data } = useBlockNotesData(currentBlockNarrativeId, setBlockNotes)
-	const { mutate: postNotesData, isLoading: isPosting } = usePostBlockNotesData()
-
-	console.log(_.isEqual(data, blockNotes))
+	const { mutate: postNotesData, isLoading: isPosting, isSuccess } = usePostBlockNotesData()
 
 	useEffect(() => {
 		const data = async () => {
-			const block = await alcProvider.getBlockWithTransactions(parseInt(currentBlockNum))
-
-			if (block) {
-				setBlockData(block)
-			} else {
+			try {
+				const block = await alcProvider.getBlockWithTransactions(parseInt(currentBlockNum))
+				if (block) {
+					setBlockData(block)
+				} else {
+					deleteData({ endpoint: "block_narratives", id: currentBlockNarrativeId })
+					setIsInvalidBlock(true)
+				}
+			} catch {
+				deleteData({ endpoint: "block_narratives", id: currentBlockNarrativeId })
 				setIsInvalidBlock(true)
 			}
 		}
@@ -66,30 +72,42 @@ const BlockEdit = ({ isShow = false }) => {
 	}
 
 	if (!currentBlockNarrativeId) {
-		return <div>This narrative does not exist</div>
+		return (
+			<div className='h-screen grid place-content-center bg-gradient-to-r from-primary to-primaryHover'>
+				This narrative does not exist
+			</div>
+		)
 	}
 
 	if (isInvalidBlock) {
 		return (
-			<div>
-				<div>Invalid Block Input</div>
-				<Link to='/block'>Try again</Link>
+			<div className='h-screen grid place-content-center'>
+				<div className='bg-stone-100 rounded-xl p-4 shadow-md shadow-stone-300'>
+					<div className='text-red-500 font-semibold mb-5'>Invalid block input</div>
+
+					<div className='hover:underline'>
+						<Link to='/block'>
+							<div className='flex items-center'>
+								<FiArrowLeft />
+								New Block
+							</div>
+						</Link>
+					</div>
+				</div>
 			</div>
 		)
 	}
 
 	if (Object.keys(blockData).length === 0) {
-		return <div>Loading block data...</div>
+		return (
+			<div className='h-screen grid place-content-center bg-gradient-to-r from-primary to-primaryHover'>
+				Loading block data...
+			</div>
+		)
 	}
 
 	return (
-		<div>
-			{!isShow && (
-				<Button>
-					<Link to='/block'>New Block</Link>
-				</Button>
-			)}
-
+		<div className='h-screen bg-gradient-to-r from-primary to-primaryHover pt-20 pl-10 pr-10'>
 			<BlockMetadata
 				blockNumber={blockData?.number}
 				timestamp={blockData?.timestamp}
@@ -99,32 +117,29 @@ const BlockEdit = ({ isShow = false }) => {
 				minedBy={blockData?.miner}
 				txLength={blockData?.transactions?.length}
 				extraData={blockData?.extraData?.toString()}
+				isPosting={isPosting}
+				canEdit={canEdit}
+				data={data}
+				blockNotes={blockNotes}
+				handlePostNotes={handlePostNotes}
+				isSuccess={isSuccess}
 			/>
 
-			{!isShow && (
-				<div>
-					<Button customOnClick={handlePostNotes}>Save</Button>
-					{isPosting ? (
-						<span>Saving...</span>
-					) : (
-						<>{_.isEqual(data, blockNotes) ? <span></span> : <span>Unsaved changes</span>}</>
-					)}
-				</div>
-			)}
-
-			{blockData.transactions.map((tx) => {
-				return (
-					<BlockTx
-						tx={tx}
-						key={tx?.hash}
-						blockNotes={blockNotes}
-						setBlockNotes={setBlockNotes}
-						currentBlockNarrativeId={currentBlockNarrativeId}
-						isShow={isShow}
-						canEdit={canEdit}
-					/>
-				)
-			})}
+			<div className='pl-36 sm:pl-64 '>
+				{blockData.transactions.map((tx) => {
+					return (
+						<BlockTx
+							tx={tx}
+							key={tx?.hash}
+							blockNotes={blockNotes}
+							setBlockNotes={setBlockNotes}
+							currentBlockNarrativeId={currentBlockNarrativeId}
+							isShow={isShow}
+							canEdit={canEdit}
+						/>
+					)
+				})}
+			</div>
 		</div>
 	)
 }

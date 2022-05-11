@@ -1,27 +1,19 @@
 import { useNavigate } from "react-router-dom"
-import Tiptap from "../components/Tiptap"
-import dayjs from "dayjs"
 import { useUserNarrativesData, useDeleteUserNarrative } from "../hooks/useUserNarrativesData"
+import ExploreBlock from "../components/ExploreBlock"
+import ExploreTransaction from "../components/ExploreTransaction"
+import { useUser } from "../context/UserContext"
 
-const UserNarratives = ({ canEdit = true }) => {
-	const { data, isLoading } = useUserNarrativesData()
-	const { mutate: deleteData, isLoading: isDeleting } = useDeleteUserNarrative()
+const UserNarratives = ({ canEdit = true, userToView }) => {
 	const navigate = useNavigate()
+	const currentUser = useUser()
+	const { data, isLoading } = useUserNarrativesData(canEdit ? currentUser?.address : userToView)
+	const { mutate: deleteData, isLoading: isDeleting } = useDeleteUserNarrative()
 
 	console.log(data)
 
-	const txnNoteAttributes = [
-		"note_contract_address",
-		"note_effective_gas_price",
-		"note_from",
-		"note_to",
-		"note_logs",
-		"note_gas_used",
-	]
-
-	const handleOnClick = (base, narritiveId, hashOrNum) => {
-		console.log("click")
-		canEdit ? navigate(`/${base}/${narritiveId}/${hashOrNum}/edit`) : navigate(`/${base}/${narritiveId}/${hashOrNum}`)
+	const handleOnClick = (base, narritiveId, hashOrNum, edit = false) => {
+		edit ? navigate(`/${base}/${narritiveId}/${hashOrNum}/edit`) : navigate(`/${base}/${narritiveId}/${hashOrNum}`)
 	}
 
 	const handleDelete = (endpoint, id) => {
@@ -29,62 +21,53 @@ const UserNarratives = ({ canEdit = true }) => {
 	}
 
 	if (isLoading) {
-		return <div className=''>Loading narratives...</div>
+		return <div className='h-screen pt-16 grid place-content-center'>Loading narratives...</div>
 	}
 
 	return (
-		<div>
-			<div>
-				<h1>Blocks</h1>
-				<div className='flex flex-row overflow-x-auto'>
+		<div className='h-screen pt-16'>
+			<div className='bg-stone-100 rounded-xl shadow-md shadow-stone-300 border border-stone-100 m-10 p-3 overflow-auto'>
+				<h1 className='border-b-2 border-stone-300 border-dotted text-xl font-semibold text-stone-700 pt-3 pl-5 pb-5 mb-5'>
+					<div className='truncate inline w-30'>{canEdit ? "My" : userToView}</div> Block Narratives
+				</h1>
+				<button />
+				<div className='flex flex-row snap-x overflow-x-auto mb-3 pb-3 scrollbar-thin scrollbar-thumb-stone-500 scrollbar-track-transparent'>
 					{data?.block_narrs &&
 						data?.block_narrs.map((block, index) => {
 							return (
-								<div key={block.block.block_num + index} className='bg-slate-100 m-1 p-2 rounded-lg w-1/5'>
-									<div>Block: {block.block.block_num}</div>
-									<div className='text-sm'>{dayjs(block.created_at).format("MMM DD, YYYY h:mma")}</div>
-									<div>
-										{block.block_notes.map((note, index) => {
-											return (
-												<div key={note?.tx_hash + index} className='bg-orange-200'>
-													<div className='truncate'>{note?.tx_hash}</div>
-													{note?.note && <Tiptap canEdit={false} content={note?.note} />}
-												</div>
-											)
-										})}
-									</div>
-									<button onClick={() => handleOnClick("block", block.id, block.block.block_num)}>Edit</button>
-									{canEdit && (
-										<button onClick={() => handleDelete("block_narratives", block.id)}>
-											{isDeleting ? <span>Deleting...</span> : <span>Delete</span>}
-										</button>
-									)}
-								</div>
+								<ExploreBlock
+									key={block.block.block_num + index}
+									isUserNarr={true}
+									block={block}
+									userInfo={data.user}
+									handleOnClick={handleOnClick}
+									handleDelete={handleDelete}
+									isDeleting={isDeleting}
+									currentUser={currentUser}
+									canEdit={canEdit}
+								/>
 							)
 						})}
 				</div>
 			</div>
-			<div>
-				<h1>Transactions</h1>
-				<div className='flex flex-row overflow-x-auto'>
+			<div className='bg-stone-100 rounded-xl shadow-md shadow-stone-300 border border-stone-100 m-10 p-3 overflow-auto'>
+				<h1 className='border-b-2 border-stone-300 border-dotted text-xl font-semibold text-stone-700 pt-3 pl-5 pb-5 mb-5'>
+					{canEdit ? "My" : userToView} Transaction Narratives
+				</h1>
+				<div className='flex flex-row snap-x overflow-x-auto mb-3 pb-3 scrollbar-thin scrollbar-thumb-stone-500 scrollbar-track-transparent'>
 					{data?.txn_narrs &&
 						data?.txn_narrs.map((txn, index) => {
 							return (
-								<div key={txn.txn.txn_hash + index} className='bg-green-100 m-1 p-2 rounded-lg w-1/5'>
-									<div className='truncate'>Hash: {txn.txn.txn_hash}</div>
-									<div>
-										{txnNoteAttributes.map((attr, index) => {
-											return (
-												<div key={attr + index}>
-													{txn?.[attr] && <div>{attr}</div>}
-													{txn?.[attr] && <Tiptap canEdit={false} content={txn?.[attr]} />}
-												</div>
-											)
-										})}
-									</div>
-									<button onClick={() => handleOnClick("transaction", txn.id, txn.txn.txn_hash)}>Edit</button>
-									{canEdit && <button onClick={() => handleDelete("transaction_narratives", txn.id)}>Delete</button>}
-								</div>
+								<ExploreTransaction
+									key={txn.txn.txn_hash + index}
+									txn={txn}
+									userInfo={data.user}
+									handleOnClick={handleOnClick}
+									handleDelete={handleDelete}
+									isDeleting={isDeleting}
+									currentUser={currentUser}
+									canEdit={canEdit}
+								/>
 							)
 						})}
 				</div>

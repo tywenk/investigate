@@ -3,6 +3,8 @@ import { useState, useRef, useEffect } from "react"
 import Tiptap from "../components/Tiptap"
 import Button from "../components/Button"
 import BlockTxMore from "../components/BlockTxMore"
+import CopyableItem from "../components/CopyableItem"
+import AddNoteButton from "../components/AddNoteButton"
 
 const BlockTx = ({ tx, blockNotes, setBlockNotes, currentBlockNarrativeId, isShow, canEdit }) => {
 	const [showNote, setShowNote] = useState(false)
@@ -63,33 +65,51 @@ const BlockTx = ({ tx, blockNotes, setBlockNotes, currentBlockNarrativeId, isSho
 	}
 
 	return (
-		<div className='grid grid-cols-2 w-1/2'>
-			<div className='bg-slate-100 m-2 p-2 rounded-lg'>
-				<div>{tx?.transactionIndex}</div>
-				<div className=' truncate'>{tx?.hash}</div>
-				<div className=''>Value: {ethers.utils.formatEther(tx?.value)} ETH</div>
-				<div className=''>Gas Limit: {ethers.utils.formatUnits(tx?.gasLimit, "wei")} gas</div>
-				<div className=''>Gas Price: {ethers.utils.formatUnits(tx?.gasPrice, "gwei")} gwei</div>
-				<div className=' truncate'>From: {tx?.from}</div>
-				<div className=' truncate'>To: {tx?.to}</div>
+		<div className='grid grid-cols-2 w-full bg-stone-200 mx-1 mb-1 p-2 rounded-lg border border-stone-400'>
+			<div className=''>
+				<div className='text-xs font-mono text-stone-50 bg-primaryHover w-fit h-fit rounded-lg p-1'>
+					{tx?.transactionIndex}
+				</div>
+				<div className='truncate text-xs font-mono text-stone-500'>Hash</div>
+				<CopyableItem data={tx?.hash} />
+				<div className='truncate text-xs font-mono text-stone-500'>Value</div>
+				<CopyableItem data={ethers.utils.formatEther(tx?.value)} unit={"eth"} />
+				<div className='truncate text-xs font-mono text-stone-500'>Gas Limit</div>
+				<CopyableItem data={ethers.utils.formatUnits(tx?.gasLimit, "wei")} unit={"gas"} />
+				<div className='truncate text-xs font-mono text-stone-500'>Gas Price</div>
+				<CopyableItem data={ethers.utils.formatUnits(tx?.gasPrice, "gwei")} unit={"gwei"} />
+				<div className='truncate text-xs font-mono text-stone-500'>From</div>
+				<CopyableItem data={tx?.from} />
+				<div className='truncate text-xs font-mono text-stone-500'>To</div>
+				<CopyableItem data={tx?.to} />
+
 				{!isShowMore ? (
-					<button onClick={() => setIsShowMore(!isShowMore)}>Show more</button>
+					<Button>
+						<button onClick={() => setIsShowMore(!isShowMore)}>Show more</button>
+					</Button>
 				) : (
 					<>
 						<BlockTxMore tx={tx} />
-						<button onClick={() => setIsShowMore(!isShowMore)}>Show less</button>
+						<Button>
+							<button onClick={() => setIsShowMore(!isShowMore)}>Show less</button>
+						</Button>
 					</>
 				)}
 			</div>
+
 			{!showNote && canEdit ? (
-				<button onClick={handleShowNote} className='border m-2 p-2 rounded-xl'>
-					Add note
-				</button>
+				<AddNoteButton onCustomClick={handleShowNote}>Add note</AddNoteButton>
 			) : (
 				<div className={showNote ? "bg-slate-100 m-2 p-2 rounded-lg" : "hidden"}>
 					<Tiptap canEdit={canEdit} onNoteChange={handleOnNoteChange} content={blockNotes?.[tx?.hash]?.note} />
 
-					{canEdit && <Button customOnClick={handleDiscardNote}>Discard</Button>}
+					{canEdit && (
+						<div className='flex justify-end'>
+							<button className='hover:underline text-sm ml-2 mr-2 hover:text-red-500' onClick={handleDiscardNote}>
+								Discard
+							</button>
+						</div>
+					)}
 				</div>
 			)}
 		</div>

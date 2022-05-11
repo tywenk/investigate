@@ -7,15 +7,15 @@ const Block = () => {
 
 	if (!currentUser?.address) {
 		return (
-			<div>
-				Please Install metamsk to proceed
-				<InstallMetaMaskButton></InstallMetaMaskButton>
+			<div className='h-screen grid place-content-center'>
+				Please install Metamask to proceed
+				<InstallMetaMaskButton />
 			</div>
 		)
 	}
 
 	return (
-		<div className='h-screen grid place-content-center bg-gradient-to-r from-primary to-primaryHover'>
+		<div className='h-screen grid place-content-center'>
 			<StartInputForm endpoint={"blocks"} route='block' />
 		</div>
 	)

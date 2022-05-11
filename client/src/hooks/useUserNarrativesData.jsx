@@ -4,13 +4,12 @@ import { useUser } from "../context/UserContext"
 const getUserNarratives = async ({ queryKey }) => {
 	const [, currentUser] = queryKey
 
-	const res = await fetch(`/investigations/${currentUser.id}`)
+	const res = await fetch(`/investigations/${currentUser}`)
 
 	return res.json()
 }
 
 const deleteNarrative = async ({ endpoint, id }) => {
-	console.log(id)
 	const res = await fetch(`/${endpoint.toString()}/${parseInt(id)}`, {
 		method: "DELETE",
 	})
@@ -18,8 +17,8 @@ const deleteNarrative = async ({ endpoint, id }) => {
 	return res
 }
 
-export const useUserNarrativesData = () => {
-	const currentUser = useUser()
+export const useUserNarrativesData = (userToQuery) => {
+	const currentUser = userToQuery
 
 	return useQuery(["userNarratives", currentUser], getUserNarratives, {
 		onSuccess: () => console.log("Sucessfull retrieved data for user narratives"),

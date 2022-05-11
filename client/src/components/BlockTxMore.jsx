@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useAlchemy } from "../context/AlchemyContext"
 import { ethers } from "ethers"
+import CopyableItem from "../components/CopyableItem"
 
 const BlockTxMore = ({ tx }) => {
 	const [txInfo, setTxInfo] = useState({})
@@ -18,8 +19,9 @@ const BlockTxMore = ({ tx }) => {
 	if (Object.keys(txInfo).length === 0) return <div>Loading...</div>
 
 	return (
-		<div>
-			<div>Cumulative Gas Used: {ethers.utils.formatUnits(txInfo?.cumulativeGasUsed, "0").toString()}</div>
+		<div className='mt-2'>
+			<div className='truncate text-xs font-mono text-stone-500'>Cumulative Gas Used</div>
+			<CopyableItem data={ethers.utils.formatUnits(txInfo?.cumulativeGasUsed, "0").toString()} />
 			<div className=''>
 				Effective Gas Price: {ethers.utils.formatUnits(txInfo?.effectiveGasPrice, "gwei").toString()} gwei
 			</div>

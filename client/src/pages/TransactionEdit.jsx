@@ -8,31 +8,40 @@ import Button from "../components/Button"
 import TransactionDetail from "../components/TransactionDetail"
 import { FiArrowLeft } from "react-icons/fi"
 import CopyClipboardButton from "../components/CopyClipboardButton"
+import { useDeleteUserNarrative } from "../hooks/useUserNarrativesData"
 
 const TransactionEdit = ({ isShow = false }) => {
 	const [txData, setTxData] = useState({})
 	const [txNotes, setTxNotes] = useState({})
-	const [isInvalidBlock, setIsInvalidBlock] = useState(false)
+	const [isInvalidTx, setIsInvalidTx] = useState(false)
 	const [canEdit, setCanEdit] = useState(false)
 	const { txHash: currentTxHash, narrId: currentTxNarrativeId } = useParams()
 	const alcProvider = useAlchemy()
 	const currentUser = useUser()
 	const updateCurrentUser = useUserUpdate()
+	const { mutate: deleteData, isLoading: isDeleting } = useDeleteUserNarrative()
 
 	const { data } = useTransactionNotesData(currentTxNarrativeId, setTxNotes)
-	console.log(txData)
 	const { mutate: postNotesData, isLoading: isPosting, isSuccess } = usePostTransactionNotesData()
 
 	useEffect(() => {
 		const data = async () => {
-			const tx = await alcProvider.getTransactionReceipt(currentTxHash.toString())
-			const tx2 = await alcProvider.getTransaction(currentTxHash.toString())
+			try {
+				const tx = await alcProvider.getTransactionReceipt(currentTxHash.toString())
+				const tx2 = await alcProvider.getTransaction(currentTxHash.toString())
 
-			if (tx) {
-				tx.value = tx2.value
-				setTxData(tx)
-			} else {
-				setIsInvalidBlock(true)
+				console.log(tx)
+
+				if (tx) {
+					tx.value = tx2.value
+					setTxData(tx)
+				} else {
+					deleteData({ endpoint: "transaction_narratives", id: currentTxNarrativeId })
+					setIsInvalidTx(true)
+				}
+			} catch {
+				deleteData({ endpoint: "transaction_narratives", id: currentTxNarrativeId })
+				setIsInvalidTx(true)
 			}
 		}
 
@@ -66,21 +75,35 @@ const TransactionEdit = ({ isShow = false }) => {
 		return <div>This narrative does not exist</div>
 	}
 
-	if (isInvalidBlock) {
+	if (isInvalidTx) {
 		return (
-			<div>
-				<div>Invalid Transaction Input</div>
-				<Link to='/transaction'>Try again</Link> p
+			<div className='h-screen bg-fixed grid place-content-center bg-gradient-to-r from-primary to-primaryHover'>
+				<div className='bg-stone-100 rounded-xl p-4 shadow-md shadow-stone-300'>
+					<div className='text-red-500 font-semibold mb-5'>Invalid transaction input</div>
+
+					<div className='hover:underline'>
+						<Link to='/transaction'>
+							<div className='flex items-center'>
+								<FiArrowLeft />
+								New Transaction
+							</div>
+						</Link>
+					</div>
+				</div>
 			</div>
 		)
 	}
 
 	if (Object.keys(txData).length === 0) {
-		return <div>Loading block data...</div>
+		return (
+			<div className='h-screen bg-gradient-to-r from-primary to-primaryHover pt-16 grid place-content-center'>
+				Loading transaction data...
+			</div>
+		)
 	}
 
 	return (
-		<div className='h-screen bg-scroll bg-gradient-to-r from-primary to-primaryHover pt-20 pl-10 pr-10'>
+		<div className='h-screen pt-20 pl-10 pr-10'>
 			<div className='w-36 sm:w-60 fixed flex flex-col bg-stone-200 p-2 rounded-lg border border-stone-400 h-auto'>
 				<div>
 					<div className='text-xs font-mono text-stone-500'>Transaction Hash</div>
@@ -108,31 +131,36 @@ const TransactionEdit = ({ isShow = false }) => {
 					</div>
 				</div>
 
-				<div class='relative flex py-1 items-center'>
-					<div class='flex-grow border-t border-gray-400'></div>
-					<span class='flex-shrink mx-2 text-gray-400'>Content</span>
-					<div class='flex-grow border-t border-gray-400'></div>
+				<div className='relative flex py-1 items-center'>
+					<div className='flex-grow border-t border-gray-400'></div>
 				</div>
 
 				{canEdit && (
-					<div className='flex flex-row space-between'>
-						<div>
-							<Button customOnClick={handlePostNotes}>{isPosting ? <div>Saving...</div> : <div>Save</div>}</Button>
-							{_.isEqual(data, txNotes) ? (
-								isSuccess && (
-									<span className='rounded-md border bg-stone-300 border-stone-400 px-2 py-0.5 m-1 transition-opacity'>
-										Saved
+					<>
+						<div className='flex flex-row space-between'>
+							<div>
+								<Button customOnClick={handlePostNotes}>{isPosting ? <div>Saving...</div> : <div>Save</div>}</Button>
+								{_.isEqual(data, txNotes) ? (
+									isSuccess && (
+										<span className='rounded-md border bg-stone-300 border-stone-400 px-2 py-0.5 m-1 transition-opacity'>
+											Saved
+										</span>
+									)
+								) : (
+									<span className='rounded-md border bg-yellow-300 border-yellow-400 px-2 py-0.5 m-1'>
+										Unsaved changes
 									</span>
-								)
-							) : (
-								<span className='rounded-md border bg-yellow-300 border-yellow-400 px-2 py-0.5 m-1'>
-									Unsaved changes
-								</span>
-							)}
+								)}
+							</div>
 						</div>
-					</div>
+
+						<div className='relative flex py-1 items-center'>
+							<div className='flex-grow border-t border-gray-400'></div>
+						</div>
+					</>
 				)}
-				<div className='hover:underline pt-2'>
+
+				<div className='hover:underline'>
 					<Link to='/transaction'>
 						<div className='flex items-center'>
 							<FiArrowLeft />
@@ -142,7 +170,7 @@ const TransactionEdit = ({ isShow = false }) => {
 				</div>
 			</div>
 
-			<div className='pl-36 sm:pl-64 self-end'>
+			<div className='pl-36 sm:pl-64 '>
 				<TransactionDetail
 					canEdit={canEdit}
 					tx={txData}

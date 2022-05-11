@@ -3,7 +3,18 @@ import Tiptap from "../components/Tiptap"
 import { FiArrowRight } from "react-icons/fi"
 import { Link } from "react-router-dom"
 
-const ExploreBlock = ({ block, index, handleOnClick, currentUser }) => {
+const ExploreBlock = ({
+	block,
+	handleOnClick,
+	handleDelete = null,
+	isDeleting = null,
+	currentUser,
+	canEdit,
+	userInfo = false,
+}) => {
+	const userAddress = userInfo ? userInfo.address : block.user.address
+	const userAddressEns = userInfo ? userInfo.ens || userInfo.address : block.user.ens || block.user.address
+
 	return (
 		<div className='h-full bg-stone-200 border border-stone-400 m-1 p-2 rounded-lg snap-center sm:w-32 md:w-64 lg:w-96 flex flex-col space-between'>
 			{/* Header */}
@@ -15,14 +26,16 @@ const ExploreBlock = ({ block, index, handleOnClick, currentUser }) => {
 					</div>
 					<div className='col-span-2'>
 						<div className=''>
-							<div className='p-0.5 ml-3'>
-								<div className='text-xs font-mono text-stone-500'>User</div>
-								<Link to={`/explore/${block.user.address}`}>
-									<div className='truncate text-sm hover:underline hover:decoration-blue-400 decoration-2 decoration-secondary rounded-lg'>
-										{block.user.ens || block.user.address}
-									</div>
-								</Link>
-							</div>
+							{!userInfo && (
+								<div className='p-0.5 ml-3'>
+									<div className='text-xs font-mono text-stone-500'>User</div>
+									<Link to={`/explore/${userAddress}`}>
+										<div className='truncate mr-4 text-sm hover:underline hover:decoration-blue-400 decoration-2 decoration-secondary rounded-lg'>
+											{userAddressEns}
+										</div>
+									</Link>
+								</div>
+							)}
 							<div className='p-0.5 ml-3'>
 								<div className='text-xs font-mono text-stone-500'>Created</div>
 								<div className='truncate text-sm text-stone-700'>
@@ -61,7 +74,7 @@ const ExploreBlock = ({ block, index, handleOnClick, currentUser }) => {
 
 			{/* CTA buttons */}
 			<div className='flex justify-end'>
-				{currentUser.address === block.user.address && (
+				{currentUser.address === userAddress && (
 					<button
 						className='rounded-full border bg-secondary border-blue-400 hover:bg-secondaryHover hover:border-blue-300 px-2 m-1 transition ease-in-out'
 						onClick={() => handleOnClick("block", block.id, block.block.block_num, true)}
@@ -69,15 +82,25 @@ const ExploreBlock = ({ block, index, handleOnClick, currentUser }) => {
 						<div className='flex items-center'>Edit</div>
 					</button>
 				)}
-				<button
-					className='rounded-full border bg-secondary border-blue-400 hover:bg-secondaryHover hover:border-blue-300 px-2 m-1 transition ease-in-out'
-					onClick={() => handleOnClick("block", block.id, block.block.block_num)}
-				>
-					<div className='flex items-center'>
-						Open
-						<FiArrowRight />
-					</div>
-				</button>
+				{canEdit && (
+					<button
+						className='rounded-full border bg-secondary border-blue-400 hover:bg-secondaryHover hover:border-blue-300 px-2 m-1 transition ease-in-out'
+						onClick={() => handleDelete("block_narratives", block.id)}
+					>
+						{isDeleting ? <span>Deleting...</span> : <span>Delete</span>}
+					</button>
+				)}
+				{!canEdit && (
+					<button
+						className='rounded-full border bg-secondary border-blue-400 hover:bg-secondaryHover hover:border-blue-300 px-2 m-1 transition ease-in-out'
+						onClick={() => handleOnClick("block", block.id, block.block.block_num)}
+					>
+						<div className='flex items-center'>
+							Open
+							<FiArrowRight />
+						</div>
+					</button>
+				)}
 			</div>
 		</div>
 	)

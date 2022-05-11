@@ -3,7 +3,18 @@ import Tiptap from "../components/Tiptap"
 import { FiArrowRight } from "react-icons/fi"
 import { Link } from "react-router-dom"
 
-const ExploreTransaction = ({ txn, handleOnClick, currentUser }) => {
+const ExploreTransaction = ({
+	txn,
+	handleOnClick,
+	handleDelete = null,
+	isDeleting = null,
+	currentUser,
+	canEdit,
+	userInfo = false,
+}) => {
+	const userAddress = userInfo ? userInfo.address : txn.user.address
+	const userAddressEns = userInfo ? userInfo.ens || userInfo.address : txn.user.ens || txn.user.address
+
 	const parseTxNoteAttr = (attr) => {
 		switch (attr) {
 			case "note_to":
@@ -43,15 +54,17 @@ const ExploreTransaction = ({ txn, handleOnClick, currentUser }) => {
 						<div className='font-bold text-lg p-0.5 truncate'>{txn.txn.txn_hash}</div>
 					</div>
 					<div className='col-span-2'>
-						<div className=''>
-							<div className='p-0.5 ml-3'>
-								<div className='text-xs font-mono text-stone-500'>User</div>
-								<Link to={`/explore/${txn.user.address}`}>
-									<div className='truncate text-sm hover:underline hover:decoration-blue-400 decoration-2 decoration-secondary rounded-lg'>
-										{txn.user.ens || txn.user.address}
-									</div>
-								</Link>
-							</div>
+						<div className='w-auto'>
+							{!userInfo && (
+								<div className='p-0.5 ml-3'>
+									<div className='text-xs font-mono text-stone-500'>User</div>
+									<Link to={`/explore/${userAddress}`}>
+										<div className='truncate mr-4 text-sm hover:underline hover:decoration-blue-400 decoration-2 decoration-secondary rounded-lg'>
+											{userAddressEns}
+										</div>
+									</Link>
+								</div>
+							)}
 							<div className='p-0.5 ml-3'>
 								<div className='text-xs font-mono text-stone-500'>Created</div>
 								<div className='truncate text-sm text-stone-700'>
@@ -81,7 +94,7 @@ const ExploreTransaction = ({ txn, handleOnClick, currentUser }) => {
 			</div>
 
 			<div className='flex justify-end'>
-				{currentUser.address === txn.user.address && (
+				{currentUser.address === userAddress && (
 					<button
 						className='rounded-full border bg-secondary border-blue-400 hover:bg-secondaryHover hover:border-blue-300 px-2 m-1 transition ease-in-out'
 						onClick={() => handleOnClick("transaction", txn.id, txn.txn.txn_hash, true)}
@@ -89,15 +102,25 @@ const ExploreTransaction = ({ txn, handleOnClick, currentUser }) => {
 						<div className='flex items-center'>Edit</div>
 					</button>
 				)}
-				<button
-					className='rounded-full border bg-secondary border-blue-400 hover:bg-secondaryHover hover:border-blue-300 px-2 m-1 transition ease-in-out'
-					onClick={() => handleOnClick("transaction", txn.id, txn.txn.txn_hash)}
-				>
-					<div className='flex items-center'>
-						Open
-						<FiArrowRight />
-					</div>
-				</button>
+				{canEdit && (
+					<button
+						className='rounded-full border bg-secondary border-blue-400 hover:bg-secondaryHover hover:border-blue-300 px-2 m-1 transition ease-in-out'
+						onClick={() => handleDelete("transaction_narratives", txn.id)}
+					>
+						Delete
+					</button>
+				)}
+				{!canEdit && (
+					<button
+						className='rounded-full border bg-secondary border-blue-400 hover:bg-secondaryHover hover:border-blue-300 px-2 m-1 transition ease-in-out'
+						onClick={() => handleOnClick("transaction", txn.id, txn.txn.txn_hash)}
+					>
+						<div className='flex items-center'>
+							Open
+							<FiArrowRight />
+						</div>
+					</button>
+				)}
 			</div>
 		</div>
 	)

@@ -38,6 +38,25 @@ const StartInputForm = ({ endpoint, route }) => {
 		e.preventDefault()
 		console.log(submitContent)
 
+		if (sanitizeString(formContent).length < 1) {
+			alert(formType + " Must have an input")
+			return
+		}
+
+		let txPattern = /^0x([A-Fa-f0-9]{64})$/
+
+		if (endpoint === "txns" && !txPattern.test(sanitizeString(formContent))) {
+			alert(formType + " Invalid hash")
+			return
+		}
+
+		var blockPattern = /^\d+$/
+
+		if (endpoint === "blocks" && !blockPattern.test(sanitizeString(formContent))) {
+			alert(formType + " Invalid number")
+			return
+		}
+
 		const res = await fetch(`/${endpoint}`, {
 			method: "POST",
 			headers: {
@@ -71,7 +90,7 @@ const StartInputForm = ({ endpoint, route }) => {
 		<div className='w-full'>
 			<form onSubmit={handleSubmit}>
 				<input
-					className='bg-stone-300 placeholder:text-stone-400 placeholder:italic rounded-md focus:outline-none p-1 w-2/3 sm:w-[300px]'
+					className='bg-stone-100 placeholder:text-stone-400 placeholder:italic rounded-md focus:outline-none p-1 w-2/3 sm:w-[300px]'
 					type='text'
 					placeholder={formType}
 					value={formContent}
