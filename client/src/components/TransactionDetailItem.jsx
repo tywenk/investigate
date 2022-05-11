@@ -38,7 +38,7 @@ const TransactionDetailItem = ({ label = "", data = "", noteObjKey, canEdit, txN
 	}
 
 	return (
-		<div className='grid grid-cols-2 w-full bg-stone-200 mx-1 mb-1 p-2 rounded-lg border border-stone-400'>
+		<div className='grid grid-cols-2 w-full bg-stone-100 mx-1 mb-1 p-2 rounded-lg border border-stone-400'>
 			<div className=''>
 				<div className='truncate text-xs font-mono text-stone-500'>{label}</div>
 				<div className='flex items-center'>
@@ -52,7 +52,11 @@ const TransactionDetailItem = ({ label = "", data = "", noteObjKey, canEdit, txN
 				<AddNoteButton onCustomClick={handleShowNote}>Add note</AddNoteButton>
 			) : (
 				<div
-					className={showNote ? "bg-slate-100 ml-2 mr-2 mt-2 p-2 rounded-lg flex flex-col justify-between" : "hidden"}
+					className={
+						showNote
+							? "bg-stone-50 border border-stone-300 ml-2 mr-2 mt-2 p-2 rounded-lg flex flex-col justify-between"
+							: "hidden"
+					}
 				>
 					<Tiptap canEdit={canEdit} onNoteChange={handleOnNoteChange} content={txNotes?.[noteObjKey]} />
 					{canEdit && (

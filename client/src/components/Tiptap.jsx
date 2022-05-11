@@ -16,7 +16,7 @@ const Tiptap = ({ canEdit, onNoteChange, content }) => {
 	})
 
 	return (
-		<div className='focus:outline-none focus:ring focus:ring-violet-300'>
+		<div className='focus:outline-none focus:ring-violet-300'>
 			{/* {editor && (
 				<BubbleMenu editor={editor} tippyOptions={{ duration: 100 }} className='bg-white rounded-xl p-1'>
 					<button
@@ -52,7 +52,7 @@ const Tiptap = ({ canEdit, onNoteChange, content }) => {
 				</BubbleMenu>
 			)} */}
 			{canEdit && <TiptapMenuBar editor={editor} />}
-			<EditorContent editor={editor} className='bg-white p-1 m-1 rounded-md w-full' />
+			<EditorContent editor={editor} className='bg-white border border-stone-300 p-2 mt-2 mb-3 rounded-md w-full' />
 		</div>
 	)
 }

@@ -16,7 +16,7 @@ const ExploreBlock = ({
 	const userAddressEns = userInfo ? userInfo.ens || userInfo.address : block.user.ens || block.user.address
 
 	return (
-		<div className='h-full bg-stone-200 border border-stone-400 m-1 p-2 rounded-lg snap-center sm:w-32 md:w-64 lg:w-96 flex flex-col space-between'>
+		<div className='h-full bg-stone-100 border border-stone-400 m-1 p-2 rounded-lg snap-center sm:w-32 md:w-64 lg:w-96 flex flex-col space-between'>
 			{/* Header */}
 			<div className='mb-3 flex flex-col sm:w-32 md:w-64 lg:w-96'>
 				<div className='grid grid-cols-3 divide-x divide-dotted divide-stone-500 w-full'>
@@ -48,7 +48,7 @@ const ExploreBlock = ({
 			</div>
 
 			{/* Tx Notes */}
-			<div className='max-h-52 overflow-y-auto rounded-lg w-full'>
+			<div className='max-h-52 overflow-y-auto rounded-lg border border-stone-300 w-full'>
 				{block.block_notes.map((note, index) => {
 					return (
 						<>

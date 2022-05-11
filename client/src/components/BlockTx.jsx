@@ -10,7 +10,7 @@ const BlockTx = ({ tx, blockNotes, setBlockNotes, currentBlockNarrativeId, isSho
 	const [showNote, setShowNote] = useState(false)
 	const [isShowMore, setIsShowMore] = useState(false)
 	const [noteContent, setNoteContent] = useState("")
-	const noteInputRef = useRef()
+	// const noteInputRef = useRef()
 
 	// useEffect(() => {
 	// 	if (showNote === true) {
@@ -65,23 +65,41 @@ const BlockTx = ({ tx, blockNotes, setBlockNotes, currentBlockNarrativeId, isSho
 	}
 
 	return (
-		<div className='grid grid-cols-2 w-full bg-stone-200 mx-1 mb-1 p-2 rounded-lg border border-stone-400'>
-			<div className=''>
-				<div className='text-xs font-mono text-stone-50 bg-primaryHover w-fit h-fit rounded-lg p-1'>
-					{tx?.transactionIndex}
+		<div className='grid grid-cols-2 w-full bg-stone-100 mx-1 mb-1 p-2 rounded-lg border border-stone-400'>
+			<div>
+				<div className='text-xs font-mono text-stone-50 bg-primaryHover w-fit h-fit rounded-lg p-1 mb-2'>
+					Index {tx?.transactionIndex}
 				</div>
-				<div className='truncate text-xs font-mono text-stone-500'>Hash</div>
-				<CopyableItem data={tx?.hash} />
-				<div className='truncate text-xs font-mono text-stone-500'>Value</div>
-				<CopyableItem data={ethers.utils.formatEther(tx?.value)} unit={"eth"} />
-				<div className='truncate text-xs font-mono text-stone-500'>Gas Limit</div>
-				<CopyableItem data={ethers.utils.formatUnits(tx?.gasLimit, "wei")} unit={"gas"} />
-				<div className='truncate text-xs font-mono text-stone-500'>Gas Price</div>
-				<CopyableItem data={ethers.utils.formatUnits(tx?.gasPrice, "gwei")} unit={"gwei"} />
-				<div className='truncate text-xs font-mono text-stone-500'>From</div>
-				<CopyableItem data={tx?.from} />
-				<div className='truncate text-xs font-mono text-stone-500'>To</div>
-				<CopyableItem data={tx?.to} />
+				<div>
+					<div className='truncate text-xs font-mono text-stone-500'>Hash</div>
+					<CopyableItem data={tx?.hash} />
+				</div>
+
+				<div className='grid grid-cols-3 gap-x-4'>
+					<div>
+						<div className='truncate text-xs font-mono text-stone-500 mt-2'>Value</div>
+						<CopyableItem data={ethers.utils.formatEther(tx?.value)} unit={"eth"} />
+					</div>
+					<div>
+						<div className='truncate text-xs font-mono text-stone-500 mt-2'>Gas Limit</div>
+						<CopyableItem data={ethers.utils.commify(ethers.utils.formatUnits(tx?.gasLimit, "wei"))} unit={"gas"} />
+					</div>
+					<div>
+						<div className='truncate text-xs font-mono text-stone-500 mt-2'>Gas Price</div>
+						<CopyableItem data={ethers.utils.formatUnits(tx?.gasPrice, "gwei")} unit={"gwei"} />
+					</div>
+				</div>
+
+				<div className='grid grid-cols-2 gap-x-4'>
+					<div>
+						<div className='truncate text-xs font-mono text-stone-500 mt-2'>From</div>
+						<CopyableItem data={tx?.from} />
+					</div>
+					<div>
+						<div className='truncate text-xs font-mono text-stone-500 mt-2'>To</div>
+						<CopyableItem data={tx?.to} />
+					</div>
+				</div>
 
 				{!isShowMore ? (
 					<Button>
@@ -100,7 +118,7 @@ const BlockTx = ({ tx, blockNotes, setBlockNotes, currentBlockNarrativeId, isSho
 			{!showNote && canEdit ? (
 				<AddNoteButton onCustomClick={handleShowNote}>Add note</AddNoteButton>
 			) : (
-				<div className={showNote ? "bg-slate-100 m-2 p-2 rounded-lg" : "hidden"}>
+				<div className={showNote ? "bg-stone-50 border border-stone-300 m-2 p-2 rounded-lg" : "hidden"}>
 					<Tiptap canEdit={canEdit} onNoteChange={handleOnNoteChange} content={blockNotes?.[tx?.hash]?.note} />
 
 					{canEdit && (

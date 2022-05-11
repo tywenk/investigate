@@ -22,7 +22,7 @@ const AllNarratives = () => {
 
 	return (
 		<div className='h-screen pt-16'>
-			<div className='bg-stone-100 rounded-xl shadow-md shadow-stone-300 border border-stone-100 m-10 p-3 overflow-auto'>
+			<div className='bg-stone-50 rounded-xl shadow-md shadow-stone-300 border border-stone-100 m-10 p-3 overflow-auto'>
 				<h1 className='border-b-2 border-stone-300 border-dotted text-xl font-semibold text-stone-700 pt-3 pl-5 pb-5 mb-5'>
 					All Block Narratives
 				</h1>
@@ -41,7 +41,7 @@ const AllNarratives = () => {
 						})}
 				</div>
 			</div>
-			<div className='bg-stone-100 rounded-xl shadow-md shadow-stone-300 border border-stone-100 m-10 p-3 overflow-auto'>
+			<div className='bg-stone-50 rounded-xl shadow-md shadow-stone-300 border border-stone-100 m-10 p-3 overflow-auto'>
 				<h1 className='border-b-2 border-stone-300 border-dotted text-xl font-semibold text-stone-700 pt-3 pl-5 pb-5 mb-5'>
 					All Transaction Narratives
 				</h1>

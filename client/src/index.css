@@ -15,8 +15,16 @@ code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
+::selection {
+	background: #99cff0; /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+	background: #99cff0; /* Gecko Browsers */
+}
+
 .ProseMirror {
 }
+
 .ProseMirror > * + * {
 	margin-top: 0.75em;
 }

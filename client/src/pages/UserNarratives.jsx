@@ -26,7 +26,7 @@ const UserNarratives = ({ canEdit = true, userToView }) => {
 
 	return (
 		<div className='h-screen pt-16'>
-			<div className='bg-stone-100 rounded-xl shadow-md shadow-stone-300 border border-stone-100 m-10 p-3 overflow-auto'>
+			<div className='bg-stone-50 rounded-xl shadow-md shadow-stone-300 border border-stone-100 m-10 p-3 overflow-auto'>
 				<h1 className='border-b-2 border-stone-300 border-dotted text-xl font-semibold text-stone-700 pt-3 pl-5 pb-5 mb-5'>
 					<div className='truncate inline w-30'>{canEdit ? "My" : userToView}</div> Block Narratives
 				</h1>
@@ -50,7 +50,7 @@ const UserNarratives = ({ canEdit = true, userToView }) => {
 						})}
 				</div>
 			</div>
-			<div className='bg-stone-100 rounded-xl shadow-md shadow-stone-300 border border-stone-100 m-10 p-3 overflow-auto'>
+			<div className='bg-stone-50 rounded-xl shadow-md shadow-stone-300 border border-stone-100 m-10 p-3 overflow-auto'>
 				<h1 className='border-b-2 border-stone-300 border-dotted text-xl font-semibold text-stone-700 pt-3 pl-5 pb-5 mb-5'>
 					{canEdit ? "My" : userToView} Transaction Narratives
 				</h1>

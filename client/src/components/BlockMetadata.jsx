@@ -26,7 +26,7 @@ const BlockMetadata = ({
 	isSuccess,
 }) => {
 	return (
-		<div className='w-36 sm:w-60 fixed flex flex-col bg-stone-200 p-2 rounded-lg border border-stone-400 h-auto'>
+		<div className='w-36 sm:w-60 fixed flex flex-col bg-stone-100 p-2 rounded-lg border border-stone-400 h-auto'>
 			<div>
 				<div className='text-xs font-mono text-stone-500'>Block Number</div>
 				<div className='flex items-center'>

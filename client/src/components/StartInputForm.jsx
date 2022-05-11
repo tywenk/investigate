@@ -97,8 +97,8 @@ const StartInputForm = ({ endpoint, route }) => {
 					onChange={(e) => setFormContent(e.target.value)}
 					autoFocus
 				></input>
-				<Button className='hover:pointer'>
-					<input type='submit' value='Enter' />
+				<Button>
+					<input className='cursor-pointer' type='submit' value='Enter' />
 				</Button>
 			</form>
 		</div>
