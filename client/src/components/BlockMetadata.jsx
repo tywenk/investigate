@@ -1,11 +1,12 @@
+import { useState } from "react"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import { ethers } from "ethers"
 import CopyClipboardButton from "../components/CopyClipboardButton"
 import _ from "lodash"
 import Button from "../components/Button"
-import { Link } from "react-router-dom"
-import { FiArrowLeft } from "react-icons/fi"
+import { Link, useNavigate } from "react-router-dom"
+import { FiArrowLeft, FiTrash, FiCornerUpLeft } from "react-icons/fi"
 
 dayjs.extend(utc)
 
@@ -24,7 +25,13 @@ const BlockMetadata = ({
 	blockNotes,
 	handlePostNotes,
 	isSuccess,
+	handleDelete,
+	currentBlockNarrativeId,
+	currentUser,
 }) => {
+	const [confirmDelete, setConfirmDelete] = useState(false)
+	const navigate = useNavigate()
+
 	return (
 		<div className='w-36 sm:w-60 fixed flex flex-col bg-stone-100 p-2 rounded-lg border border-stone-400 h-auto'>
 			<div>
@@ -94,12 +101,51 @@ const BlockMetadata = ({
 						<div className='relative flex py-1 items-center'>
 							<div className='flex-grow border-t border-gray-400'></div>
 						</div>
+
+						<div>
+							{!confirmDelete ? (
+								<button className='hover:underline hover:text-red-500' onClick={() => setConfirmDelete((s) => !s)}>
+									<div className='flex items-center gap-1'>
+										<FiTrash />
+										Delete
+									</div>
+								</button>
+							) : (
+								<>
+									<button
+										className='hover:underline hover:text-red-500'
+										onClick={() => {
+											handleDelete("transaction_narratives", currentBlockNarrativeId)
+											navigate(`/narratives/${currentUser.address}`)
+										}}
+									>
+										<div className='flex items-center gap-1'>
+											<FiTrash />
+											Confirm
+										</div>
+									</button>
+									<button
+										className='hover:underline hover:text-green-500 ml-2'
+										onClick={() => setConfirmDelete((s) => !s)}
+									>
+										<div className='flex items-center gap-1'>
+											<FiCornerUpLeft />
+											Cancel
+										</div>
+									</button>
+								</>
+							)}
+						</div>
+
+						<div className='relative flex py-1 items-center'>
+							<div className='flex-grow border-t border-gray-400'></div>
+						</div>
 					</>
 				)}
 
 				<div className='hover:underline'>
 					<Link to='/block'>
-						<div className='flex items-center'>
+						<div className='flex items-center gap-1'>
 							<FiArrowLeft />
 							New Block
 						</div>

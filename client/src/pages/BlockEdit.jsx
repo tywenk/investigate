@@ -21,9 +21,12 @@ const BlockEdit = ({ isShow = false }) => {
 	const currentUser = useUser()
 	const updateCurrentUser = useUserUpdate()
 	const { mutate: deleteData, isLoading: isDeleting } = useDeleteUserNarrative()
-
 	const { data } = useBlockNotesData(currentBlockNarrativeId, setBlockNotes)
 	const { mutate: postNotesData, isLoading: isPosting, isSuccess } = usePostBlockNotesData()
+
+	const handleDelete = (endpoint, id) => {
+		deleteData({ endpoint, id })
+	}
 
 	useEffect(() => {
 		const data = async () => {
@@ -32,11 +35,11 @@ const BlockEdit = ({ isShow = false }) => {
 				if (block) {
 					setBlockData(block)
 				} else {
-					deleteData({ endpoint: "block_narratives", id: currentBlockNarrativeId })
+					handleDelete("block_narratives", currentBlockNarrativeId)
 					setIsInvalidBlock(true)
 				}
 			} catch {
-				deleteData({ endpoint: "block_narratives", id: currentBlockNarrativeId })
+				handleDelete("block_narratives", currentBlockNarrativeId)
 				setIsInvalidBlock(true)
 			}
 		}
@@ -123,6 +126,9 @@ const BlockEdit = ({ isShow = false }) => {
 				blockNotes={blockNotes}
 				handlePostNotes={handlePostNotes}
 				isSuccess={isSuccess}
+				handleDelete={handleDelete}
+				currentBlockNarrativeId={currentBlockNarrativeId}
+				currentUser={currentUser}
 			/>
 
 			<div className='pl-36 sm:pl-64 '>

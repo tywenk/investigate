@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react"
-import { useParams, Link } from "react-router-dom"
+import { useParams, Link, useNavigate } from "react-router-dom"
 import { useAlchemy } from "../context/AlchemyContext"
 import { useUser, useUserUpdate } from "../context/UserContext"
 import { useTransactionNotesData, usePostTransactionNotesData } from "../hooks/useTransactionNotesData"
 import _ from "lodash"
 import Button from "../components/Button"
 import TransactionDetail from "../components/TransactionDetail"
-import { FiArrowLeft } from "react-icons/fi"
+import { FiArrowLeft, FiTrash, FiCornerUpLeft } from "react-icons/fi"
 import CopyClipboardButton from "../components/CopyClipboardButton"
 import { useDeleteUserNarrative } from "../hooks/useUserNarrativesData"
 
@@ -15,14 +15,19 @@ const TransactionEdit = ({ isShow = false }) => {
 	const [txNotes, setTxNotes] = useState({})
 	const [isInvalidTx, setIsInvalidTx] = useState(false)
 	const [canEdit, setCanEdit] = useState(false)
+	const [confirmDelete, setConfirmDelete] = useState(false)
 	const { txHash: currentTxHash, narrId: currentTxNarrativeId } = useParams()
 	const alcProvider = useAlchemy()
+	const navigate = useNavigate()
 	const currentUser = useUser()
 	const updateCurrentUser = useUserUpdate()
 	const { mutate: deleteData, isLoading: isDeleting } = useDeleteUserNarrative()
-
 	const { data } = useTransactionNotesData(currentTxNarrativeId, setTxNotes)
 	const { mutate: postNotesData, isLoading: isPosting, isSuccess } = usePostTransactionNotesData()
+
+	const handleDelete = (endpoint, id) => {
+		deleteData({ endpoint, id })
+	}
 
 	useEffect(() => {
 		const data = async () => {
@@ -36,11 +41,11 @@ const TransactionEdit = ({ isShow = false }) => {
 					tx.value = tx2.value
 					setTxData(tx)
 				} else {
-					deleteData({ endpoint: "transaction_narratives", id: currentTxNarrativeId })
+					handleDelete("transaction_narratives", currentTxNarrativeId)
 					setIsInvalidTx(true)
 				}
 			} catch {
-				deleteData({ endpoint: "transaction_narratives", id: currentTxNarrativeId })
+				handleDelete("transaction_narratives", currentTxNarrativeId)
 				setIsInvalidTx(true)
 			}
 		}
@@ -152,6 +157,45 @@ const TransactionEdit = ({ isShow = false }) => {
 									</span>
 								)}
 							</div>
+						</div>
+
+						<div className='relative flex py-1 items-center'>
+							<div className='flex-grow border-t border-gray-400'></div>
+						</div>
+
+						<div>
+							{!confirmDelete ? (
+								<button className='hover:underline hover:text-red-500' onClick={() => setConfirmDelete((s) => !s)}>
+									<div className='flex items-center gap-1'>
+										<FiTrash />
+										Delete
+									</div>
+								</button>
+							) : (
+								<>
+									<button
+										className='hover:underline hover:text-red-500'
+										onClick={() => {
+											handleDelete("transaction_narratives", currentTxNarrativeId)
+											navigate(`/narratives/${currentUser.address}`)
+										}}
+									>
+										<div className='flex items-center gap-1'>
+											<FiTrash />
+											Confirm
+										</div>
+									</button>
+									<button
+										className='hover:underline hover:text-green-500 ml-2'
+										onClick={() => setConfirmDelete((s) => !s)}
+									>
+										<div className='flex items-center gap-1'>
+											<FiCornerUpLeft />
+											Cancel
+										</div>
+									</button>
+								</>
+							)}
 						</div>
 
 						<div className='relative flex py-1 items-center'>
