@@ -11,15 +11,41 @@ body {
 	background-image: linear-gradient(to right, theme("colors.primary"), theme("colors.primaryHover"));
 }
 
-code {
-	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+body::-webkit-scrollbar {
+	width: 1em;
+}
+
+body::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+body::-webkit-scrollbar-thumb {
+	background-color: darkgrey;
+	outline: 1px solid slategrey;
 }
 
 ::selection {
-	background: #99cff0; /* WebKit/Blink Browsers */
+	background: #ffe032; /* WebKit/Blink Browsers */
 }
 ::-moz-selection {
-	background: #99cff0; /* Gecko Browsers */
+	background: #ffe032; /* Gecko Browsers */
+}
+
+body::-webkit-scrollbar {
+	width: 1em;
+}
+
+body::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+body::-webkit-scrollbar-thumb {
+	background-color: darkgrey;
+	outline: 1px solid slategrey;
+}
+
+code {
+	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 .ProseMirror {
@@ -46,7 +72,7 @@ code {
 }
 
 .ProseMirror pre {
-	@apply bg-stone-500 m-1 p-1 pl-3 text-white font-mono text-sm border-stone-600 border-l-2;
+	@apply bg-stone-400 m-1 p-1 pl-3 text-white font-mono text-sm border-stone-600 border-l-2;
 }
 .ProseMirror pre code {
 	color: inherit;
