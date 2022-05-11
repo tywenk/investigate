@@ -7,9 +7,8 @@ const Transaction = () => {
 
 	if (!currentUser?.address) {
 		return (
-			<div>
-				Please Install metamsk to proceed
-				<InstallMetaMaskButton></InstallMetaMaskButton>
+			<div className='h-screen grid place-content-center '>
+				<div className='bg-stone-50 p-4 rounded-2xl'>No wallet connected</div>
 			</div>
 		)
 	}

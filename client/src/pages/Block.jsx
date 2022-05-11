@@ -7,9 +7,8 @@ const Block = () => {
 
 	if (!currentUser?.address) {
 		return (
-			<div className='h-screen grid place-content-center'>
-				Please install Metamask to proceed
-				<InstallMetaMaskButton />
+			<div className='h-screen grid place-content-center '>
+				<div className='bg-stone-50 p-4 rounded-2xl'>No wallet connected</div>
 			</div>
 		)
 	}

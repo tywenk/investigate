@@ -1,0 +1,8 @@
+build-essential
+automake
+pkg-config
+libtool
+libffi-dev
+libssl-dev
+libgmp-dev
+python-dev
