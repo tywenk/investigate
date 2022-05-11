@@ -12,6 +12,7 @@ class InvestigationSerializer < ActiveModel::Serializer
 		object.block_narratives.map do |narr|
 			{
 				id: narr.id,
+				label: narr.label,
 				created_at: narr.created_at,
 				updated_at: narr.updated_at,
 				block_notes: narr.block_notes,

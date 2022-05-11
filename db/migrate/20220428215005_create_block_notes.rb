@@ -4,7 +4,6 @@ class CreateBlockNotes < ActiveRecord::Migration[6.1]
 			t.references :block_narrative, null: false, foreign_key: true
 			t.string :tx_hash
 			t.text :note
-			t.string :label
 
 			t.timestamps default: -> { 'CURRENT_TIMESTAMP' }
 		end

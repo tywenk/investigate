@@ -17,7 +17,7 @@ User.destroy_all
 u = User.create({ address: '0x22724d4Aae7aEfeC6CD63a71aDe0FC929329Af46', ens: nil })
 i = Investigation.create({ user_id: u.id })
 b = Block.create({ block_num: 14_694_104 })
-bn = BlockNarrative.create({ block_id: b.id, investigation_id: i.id })
+bn = BlockNarrative.create({ block_id: b.id, investigation_id: i.id, label: '' })
 n =
 	BlockNote.create(
 		{

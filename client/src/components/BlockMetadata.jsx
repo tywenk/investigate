@@ -7,6 +7,7 @@ import _ from "lodash"
 import Button from "../components/Button"
 import { Link, useNavigate } from "react-router-dom"
 import { FiArrowLeft, FiTrash, FiCornerUpLeft } from "react-icons/fi"
+import TextareaAutosize from "react-textarea-autosize"
 
 dayjs.extend(utc)
 
@@ -28,12 +29,24 @@ const BlockMetadata = ({
 	handleDelete,
 	currentBlockNarrativeId,
 	currentUser,
+	titleLabel,
+	setTitleLabel,
 }) => {
 	const [confirmDelete, setConfirmDelete] = useState(false)
 	const navigate = useNavigate()
 
 	return (
 		<div className='w-36 sm:w-60 fixed flex flex-col bg-stone-100 p-2 rounded-lg border border-stone-400 h-auto'>
+			<div className='w-full'>
+				<TextareaAutosize
+					className='w-full text-lg resize-none'
+					minRows={1}
+					maxRows={3}
+					value={titleLabel}
+					onChange={(e) => setTitleLabel(e.target.value)}
+					defaultValue='Add title...'
+				/>
+			</div>
 			<div>
 				<div className='text-xs font-mono text-stone-500'>Block Number</div>
 				<div className='flex items-center'>

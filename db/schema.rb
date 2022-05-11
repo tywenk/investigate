@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 2022_05_03_193958) do
   create_table "block_narratives", force: :cascade do |t|
     t.bigint "block_id", null: false
     t.bigint "investigation_id", null: false
+    t.string "label"
     t.datetime "created_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.index ["block_id"], name: "index_block_narratives_on_block_id"
@@ -28,7 +29,6 @@ ActiveRecord::Schema.define(version: 2022_05_03_193958) do
     t.bigint "block_narrative_id", null: false
     t.string "tx_hash"
     t.text "note"
-    t.string "label"
     t.datetime "created_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.index ["block_narrative_id"], name: "index_block_notes_on_block_narrative_id"

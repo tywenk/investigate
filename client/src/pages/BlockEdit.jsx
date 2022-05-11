@@ -14,6 +14,7 @@ import { useDeleteUserNarrative } from "../hooks/useUserNarrativesData"
 const BlockEdit = ({ isShow = false }) => {
 	const [blockData, setBlockData] = useState({})
 	const [blockNotes, setBlockNotes] = useState({})
+	const [titleLabel, setTitleLabel] = useState("")
 	const [isInvalidBlock, setIsInvalidBlock] = useState(false)
 	const [canEdit, setCanEdit] = useState(false)
 	const { blockNum: currentBlockNum, narrId: currentBlockNarrativeId } = useParams()
@@ -129,6 +130,8 @@ const BlockEdit = ({ isShow = false }) => {
 				handleDelete={handleDelete}
 				currentBlockNarrativeId={currentBlockNarrativeId}
 				currentUser={currentUser}
+				titleLabel={titleLabel}
+				setTitleLabel={setTitleLabel}
 			/>
 
 			<div className='pl-36 sm:pl-64 '>
