@@ -26,6 +26,6 @@ class BlockNotesController < ApplicationController
 	private
 
 	def block_note_params
-		params.permit({ notes: %i[tx_hash note] }, :label, :narr_id)
+		params.permit({ notes: %i[tx_hash note block_narrative_id] }, :label, :narr_id)
 	end
 end
