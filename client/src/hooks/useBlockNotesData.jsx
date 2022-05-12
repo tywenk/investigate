@@ -2,13 +2,13 @@ import { useQuery, useMutation, useQueryClient } from "react-query"
 
 const onGetSuccess = (data, setBlockNotes, setTitleLabel) => {
 	setBlockNotes(data)
-	console.log(data?.[Object.keys(data)[0]]?.block_narrative?.label)
+	// console.log(data?.[Object.keys(data)[0]]?.block_narrative?.label)
 	setTitleLabel(data?.[Object.keys(data)[0]]?.block_narrative?.label ?? "Untitled")
-	console.log("success fetching block notes: ", data)
+	// console.log("success fetching block notes: ", data)
 }
 
 const onError = (error) => {
-	console.log("error fetching block data", error)
+	// console.log("error fetching block data", error)
 }
 
 const getBlockNotes = async ({ queryKey }) => {
@@ -25,7 +25,7 @@ const getBlockNotes = async ({ queryKey }) => {
 const postBlockNotes = async ({ blockNotes, titleLabel, currentBlockNarrativeId }) => {
 	const post = { notes: Object.values(blockNotes), label: titleLabel, narr_id: currentBlockNarrativeId }
 
-	console.log(post)
+	// console.log(post)
 
 	const res = await fetch("/block_notes", {
 		method: "POST",

@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "react-query"
 
 const getTxNotes = async ({ queryKey }) => {
-	const [_, currentTxNarrativeId] = queryKey
+	const [, currentTxNarrativeId] = queryKey
 	const res = await fetch(`/transaction_narratives/${currentTxNarrativeId}`)
 	return res.json()
 }
@@ -14,7 +14,7 @@ const postTxNotes = async ({ txNotes, titleLabel }) => {
 	delete txNotes["investigation"]
 	delete txNotes["txn"]
 
-	console.log(txNotes)
+	// console.log(txNotes)
 	const res = await fetch("/transaction_narratives/", {
 		method: "POST",
 		headers: {
@@ -29,7 +29,7 @@ const postTxNotes = async ({ txNotes, titleLabel }) => {
 export const useTransactionNotesData = (currentTxNarrativeId, setTxNotes, setTitleLabel) => {
 	return useQuery(["getTxNotes", currentTxNarrativeId], getTxNotes, {
 		onSuccess: (data) => {
-			console.log(data?.label)
+			// console.log(data?.label)
 			setTitleLabel(data?.label ?? "Untitled")
 			setTxNotes(data)
 		},

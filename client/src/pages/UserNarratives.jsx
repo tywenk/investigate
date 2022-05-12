@@ -10,7 +10,7 @@ const UserNarratives = ({ canEdit = true, userToView }) => {
 	const { data, isLoading } = useUserNarrativesData(canEdit ? currentUser?.address : userToView)
 	const { mutate: deleteData, isLoading: isDeleting } = useDeleteUserNarrative()
 
-	console.log(data)
+	// console.log(data)
 
 	const handleOnClick = (base, narritiveId, hashOrNum, edit = false) => {
 		edit ? navigate(`/${base}/${narritiveId}/${hashOrNum}/edit`) : navigate(`/${base}/${narritiveId}/${hashOrNum}`)

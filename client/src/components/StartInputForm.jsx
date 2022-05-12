@@ -36,7 +36,7 @@ const StartInputForm = ({ endpoint, route }) => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault()
-		console.log(submitContent)
+		// console.log(submitContent)
 
 		if (sanitizeString(formContent).length < 1) {
 			alert(formType + " Must have an input")
