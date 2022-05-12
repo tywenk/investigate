@@ -1,7 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from "react-query"
 
-const onGetSuccess = (data, setBlockNotes) => {
+const onGetSuccess = (data, setBlockNotes, setTitleLabel) => {
 	setBlockNotes(data)
+	console.log(data?.[Object.keys(data)[0]]?.block_narrative?.label)
+	setTitleLabel(data?.[Object.keys(data)[0]]?.block_narrative?.label ?? "Untitled")
 	console.log("success fetching block notes: ", data)
 }
 
@@ -20,22 +22,24 @@ const getBlockNotes = async ({ queryKey }) => {
 	return res.json()
 }
 
-const postBlockNotes = async (blockNotes) => {
-	const notes = { notes: Object.values(blockNotes) }
+const postBlockNotes = async ({ blockNotes, titleLabel, currentBlockNarrativeId }) => {
+	const post = { notes: Object.values(blockNotes), label: titleLabel, narr_id: currentBlockNarrativeId }
+
+	console.log(post)
 
 	const res = await fetch("/block_notes", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
 		},
-		body: JSON.stringify(notes),
+		body: JSON.stringify(post),
 	})
 	return res.json()
 }
 
-export const useBlockNotesData = (currentBlockNarrativeId, setBlockNotes) => {
+export const useBlockNotesData = (currentBlockNarrativeId, setBlockNotes, setTitleLabel) => {
 	return useQuery(["getBlockNotes", currentBlockNarrativeId], getBlockNotes, {
-		onSuccess: (data) => onGetSuccess(data, setBlockNotes),
+		onSuccess: (data) => onGetSuccess(data, setBlockNotes, setTitleLabel),
 		onError,
 		refetchOnWindowFocus: false,
 		select: (data) => {
@@ -52,7 +56,7 @@ export const useBlockNotesData = (currentBlockNarrativeId, setBlockNotes) => {
 
 export const usePostBlockNotesData = () => {
 	const queryClient = useQueryClient()
-	return useMutation((blockNotes) => postBlockNotes(blockNotes), {
+	return useMutation((data) => postBlockNotes(data), {
 		onSuccess: (data) => {
 			queryClient.invalidateQueries("getBlockNotes")
 			// queryClient.setQueryData("getBlockNotes", (oldQueryData) => {

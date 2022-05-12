@@ -2,6 +2,7 @@ import dayjs from "dayjs"
 import Tiptap from "../components/Tiptap"
 import { FiArrowRight } from "react-icons/fi"
 import { Link } from "react-router-dom"
+import TextareaAutosize from "react-textarea-autosize"
 
 const ExploreBlock = ({
 	block,
@@ -10,6 +11,7 @@ const ExploreBlock = ({
 	isDeleting = null,
 	currentUser,
 	canEdit,
+	label,
 	userInfo = false,
 }) => {
 	const userAddress = userInfo ? userInfo.address : block.user.address
@@ -19,10 +21,16 @@ const ExploreBlock = ({
 		<div className='h-full bg-stone-100 border border-stone-400 m-1 p-2 rounded-lg snap-center sm:w-32 md:w-64 lg:w-96 flex flex-col space-between'>
 			{/* Header */}
 			<div className='mb-3 flex flex-col sm:w-32 md:w-64 lg:w-96'>
+				<div className='text-xs font-mono text-stone-500'>Title</div>
+				{label ? (
+					<div className='truncate mb-3 text-lg font-semibold'>{label}</div>
+				) : (
+					<div className='truncate mb-3 text-lg italic'>Untitled</div>
+				)}
 				<div className='grid grid-cols-3 divide-x divide-dotted divide-stone-500 w-full'>
 					<div className='col-span-1'>
 						<div className='text-xs font-mono text-stone-500'>Block</div>
-						<div className='font-bold text-lg p-0.5 truncate'>{block.block.block_num}</div>
+						<div className='text-md p-0.5 truncate'>{block.block.block_num}</div>
 					</div>
 					<div className='col-span-2'>
 						<div className=''>

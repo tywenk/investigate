@@ -22,7 +22,7 @@ const BlockEdit = ({ isShow = false }) => {
 	const currentUser = useUser()
 	const updateCurrentUser = useUserUpdate()
 	const { mutate: deleteData, isLoading: isDeleting } = useDeleteUserNarrative()
-	const { data } = useBlockNotesData(currentBlockNarrativeId, setBlockNotes)
+	const { data } = useBlockNotesData(currentBlockNarrativeId, setBlockNotes, setTitleLabel)
 	const { mutate: postNotesData, isLoading: isPosting, isSuccess } = usePostBlockNotesData()
 
 	const handleDelete = (endpoint, id) => {
@@ -72,7 +72,7 @@ const BlockEdit = ({ isShow = false }) => {
 	}, [data])
 
 	const handlePostNotes = async () => {
-		postNotesData(blockNotes)
+		postNotesData({ blockNotes, titleLabel, currentBlockNarrativeId })
 	}
 
 	if (!currentBlockNarrativeId) {

@@ -7,9 +7,10 @@ class BlockNotesController < ApplicationController
 	def create
 		arr_notes = block_note_params[:notes]
 
-		pp params[:label]
+		block_narr = BlockNarrative.find(params[:narr_id])
+		block_narr.update(label: params[:label])
 
-		pp arr_notes
+		# narr = BlockNarrative.find_by(id: params[:notes][:block_narrative_id])
 		block_notes = BlockNote.upsert_all(arr_notes, unique_by: :index_block_notes_on_tx_hash)
 		render json: block_notes, status: :created
 	end
@@ -24,6 +25,6 @@ class BlockNotesController < ApplicationController
 	private
 
 	def block_note_params
-		params.permit({ notes: %i[tx_hash note block_narrative_id] }, :label)
+		params.permit({ notes: %i[tx_hash note block_narrative_id] }, :label, :narr_id)
 	end
 end

@@ -25,7 +25,6 @@ const BlockTx = ({ tx, blockNotes, setBlockNotes, currentBlockNarrativeId, isSho
 					...prevBlockNotes,
 					[tx?.hash]: {
 						id: [tx?.hash]?.id,
-						label: [tx?.hash]?.label,
 						tx_hash: tx?.hash,
 						block_narrative_id: parseInt(currentBlockNarrativeId),
 						note: noteContent,
@@ -102,15 +101,16 @@ const BlockTx = ({ tx, blockNotes, setBlockNotes, currentBlockNarrativeId, isSho
 				</div>
 
 				{!isShowMore ? (
-					<Button>
-						<button onClick={() => setIsShowMore(!isShowMore)}>Show more</button>
-					</Button>
+					<button className='hover:underline text-stone-600 mt-4' onClick={() => setIsShowMore(!isShowMore)}>
+						Show more
+					</button>
 				) : (
 					<>
 						<BlockTxMore tx={tx} />
-						<Button>
-							<button onClick={() => setIsShowMore(!isShowMore)}>Show less</button>
-						</Button>
+
+						<button className='hover:underline text-stone-600 mt-4' onClick={() => setIsShowMore(!isShowMore)}>
+							Show less
+						</button>
 					</>
 				)}
 			</div>

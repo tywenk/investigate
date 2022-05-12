@@ -37,14 +37,14 @@ const BlockMetadata = ({
 
 	return (
 		<div className='w-36 sm:w-60 fixed flex flex-col bg-stone-100 p-2 rounded-lg border border-stone-400 h-auto'>
+			<div className='text-xs font-mono text-stone-500'>Title</div>
 			<div className='w-full'>
 				<TextareaAutosize
-					className='w-full text-lg resize-none'
+					className='w-full text-lg resize-none rounded-md bg-stone-50 border border-stone-300 p-2'
 					minRows={1}
 					maxRows={3}
 					value={titleLabel}
 					onChange={(e) => setTitleLabel(e.target.value)}
-					defaultValue='Add title...'
 				/>
 			</div>
 			<div>

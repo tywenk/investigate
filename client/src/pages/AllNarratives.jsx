@@ -33,6 +33,7 @@ const AllNarratives = () => {
 								<ExploreBlock
 									key={block.block.block_num + index}
 									block={block}
+									label={block.label}
 									handleOnClick={handleOnClick}
 									currentUser={currentUser}
 									canEdit={false}
