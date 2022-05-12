@@ -128,7 +128,7 @@ const BlockMetadata = ({
 									<button
 										className='hover:underline hover:text-red-500'
 										onClick={() => {
-											handleDelete("transaction_narratives", currentBlockNarrativeId)
+											handleDelete("block_narratives", currentBlockNarrativeId)
 											navigate(`/narratives/${currentUser.address}`)
 										}}
 									>

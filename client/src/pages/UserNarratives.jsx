@@ -39,6 +39,7 @@ const UserNarratives = ({ canEdit = true, userToView }) => {
 									key={block.block.block_num + index}
 									isUserNarr={true}
 									block={block}
+									label={block.label}
 									userInfo={data.user}
 									handleOnClick={handleOnClick}
 									handleDelete={handleDelete}
@@ -61,6 +62,7 @@ const UserNarratives = ({ canEdit = true, userToView }) => {
 								<ExploreTransaction
 									key={txn.txn.txn_hash + index}
 									txn={txn}
+									label={txn.label}
 									userInfo={data.user}
 									handleOnClick={handleOnClick}
 									handleDelete={handleDelete}

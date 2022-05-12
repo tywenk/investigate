@@ -11,10 +11,12 @@ const ExploreTransaction = ({
 	currentUser,
 	canEdit,
 	userInfo = false,
+	label,
 }) => {
 	const userAddress = userInfo ? userInfo.address : txn.user.address
 	const userAddressEns = userInfo ? userInfo.ens || userInfo.address : txn.user.ens || txn.user.address
 
+	console.log(label)
 	const parseTxNoteAttr = (attr) => {
 		switch (attr) {
 			case "note_to":
@@ -48,10 +50,16 @@ const ExploreTransaction = ({
 	return (
 		<div className='h-full bg-stone-100 border border-stone-400 m-1 p-2 rounded-lg snap-center sm:w-32 md:w-64 lg:w-96 flex flex-col space-between'>
 			<div className='mb-3 flex flex-col sm:w-32 md:w-64 lg:w-96'>
+				<div className='text-xs font-mono text-stone-500'>Title</div>
+				{label ? (
+					<div className='truncate mb-3 text-lg font-semibold'>{label}</div>
+				) : (
+					<div className='truncate mb-3 text-lg italic'>Untitled</div>
+				)}
 				<div className='grid grid-cols-3 divide-x divide-dotted divide-stone-500 w-full'>
 					<div className='col-span-1'>
 						<div className='text-xs font-mono text-stone-500'>Transaction</div>
-						<div className='font-bold text-lg p-0.5 truncate'>{txn.txn.txn_hash}</div>
+						<div className='text-md p-0.5 truncate'>{txn.txn.txn_hash}</div>
 					</div>
 					<div className='col-span-2'>
 						<div className='w-auto'>

@@ -6,9 +6,10 @@ const getTxNotes = async ({ queryKey }) => {
 	return res.json()
 }
 
-const postTxNotes = async (txNotes) => {
+const postTxNotes = async ({ txNotes, titleLabel }) => {
 	txNotes.investigation_id = parseInt(txNotes.investigation.id)
 	txNotes.txn_id = parseInt(txNotes.txn.id)
+	txNotes.label = titleLabel
 
 	delete txNotes["investigation"]
 	delete txNotes["txn"]
@@ -25,16 +26,20 @@ const postTxNotes = async (txNotes) => {
 	return res.json()
 }
 
-export const useTransactionNotesData = (currentTxNarrativeId, setTxNotes) => {
+export const useTransactionNotesData = (currentTxNarrativeId, setTxNotes, setTitleLabel) => {
 	return useQuery(["getTxNotes", currentTxNarrativeId], getTxNotes, {
-		onSuccess: (data) => setTxNotes(data),
+		onSuccess: (data) => {
+			console.log(data?.label)
+			setTitleLabel(data?.label ?? "Untitled")
+			setTxNotes(data)
+		},
 		refetchOnWindowFocus: false,
 	})
 }
 
 export const usePostTransactionNotesData = () => {
 	const queryClient = useQueryClient()
-	return useMutation((txNotes) => postTxNotes(txNotes), {
+	return useMutation((data) => postTxNotes(data), {
 		onSuccess: () => {
 			queryClient.invalidateQueries("getTxNotes")
 		},

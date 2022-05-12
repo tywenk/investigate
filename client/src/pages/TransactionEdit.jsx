@@ -9,10 +9,12 @@ import TransactionDetail from "../components/TransactionDetail"
 import { FiArrowLeft, FiTrash, FiCornerUpLeft } from "react-icons/fi"
 import CopyClipboardButton from "../components/CopyClipboardButton"
 import { useDeleteUserNarrative } from "../hooks/useUserNarrativesData"
+import TextareaAutosize from "react-textarea-autosize"
 
 const TransactionEdit = ({ isShow = false }) => {
 	const [txData, setTxData] = useState({})
 	const [txNotes, setTxNotes] = useState({})
+	const [titleLabel, setTitleLabel] = useState("")
 	const [isInvalidTx, setIsInvalidTx] = useState(false)
 	const [canEdit, setCanEdit] = useState(false)
 	const [confirmDelete, setConfirmDelete] = useState(false)
@@ -22,7 +24,7 @@ const TransactionEdit = ({ isShow = false }) => {
 	const currentUser = useUser()
 	const updateCurrentUser = useUserUpdate()
 	const { mutate: deleteData, isLoading: isDeleting } = useDeleteUserNarrative()
-	const { data } = useTransactionNotesData(currentTxNarrativeId, setTxNotes)
+	const { data } = useTransactionNotesData(currentTxNarrativeId, setTxNotes, setTitleLabel)
 	const { mutate: postNotesData, isLoading: isPosting, isSuccess } = usePostTransactionNotesData()
 
 	const handleDelete = (endpoint, id) => {
@@ -34,8 +36,6 @@ const TransactionEdit = ({ isShow = false }) => {
 			try {
 				const tx = await alcProvider.getTransactionReceipt(currentTxHash.toString())
 				const tx2 = await alcProvider.getTransaction(currentTxHash.toString())
-
-				console.log(tx)
 
 				if (tx) {
 					tx.value = tx2.value
@@ -73,7 +73,7 @@ const TransactionEdit = ({ isShow = false }) => {
 	}, [data])
 
 	const handlePostNotes = async () => {
-		postNotesData(txNotes)
+		postNotesData({ txNotes, titleLabel })
 	}
 
 	if (!currentTxNarrativeId) {
@@ -111,6 +111,16 @@ const TransactionEdit = ({ isShow = false }) => {
 		<div className='h-screen pt-20 pl-10 pr-10'>
 			<div className='w-36 sm:w-60 fixed flex flex-col bg-stone-100 p-2 rounded-lg border border-stone-400 h-auto'>
 				<div>
+					<div className='text-xs font-mono text-stone-500'>Title</div>
+					<div className='w-full'>
+						<TextareaAutosize
+							className='w-full text-lg resize-none rounded-md bg-stone-50 border border-stone-300 p-2'
+							minRows={1}
+							maxRows={3}
+							value={titleLabel}
+							onChange={(e) => setTitleLabel(e.target.value)}
+						/>
+					</div>
 					<div className='text-xs font-mono text-stone-500'>Transaction Hash</div>
 					<div className='flex items-center'>
 						<div className='truncate font-semibold '>{txData?.transactionHash}</div>

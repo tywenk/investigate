@@ -109,7 +109,7 @@ const TransactionDetail = ({ tx, canEdit, alcProvider, txNotes, setTxNotes, curr
 								// console.log("log:", log)
 								let event = iface.parseLog(log)
 								// console.log("Event:", event)
-								event?.args.map((a) => console.log(a))
+								// event?.args.map((a) => console.log(a))
 
 								return (
 									<div key={log.logIndex + index} className='bg-primary rounded-md p-2 mt-2 mb-2 grid grid-cols-9'>
@@ -134,12 +134,11 @@ const TransactionDetail = ({ tx, canEdit, alcProvider, txNotes, setTxNotes, curr
 											<div className='flex flex-col mb-2'>
 												{event?.eventFragment?.inputs.map((i, index) => {
 													let val = event?.args?.[index]
-
 													val = typeof val === "string" ? val : val.toString()
-													console.log(val)
+													// console.log(val)
 
 													return (
-														<div className='truncate'>
+														<div key={i?.name + index} className='truncate'>
 															<span>{i?.name}</span> (<span>{i?.type}</span>) <span>{val}</span>
 														</div>
 													)

@@ -53,6 +53,7 @@ const AllNarratives = () => {
 								<ExploreTransaction
 									key={txn.txn.txn_hash + index}
 									txn={txn}
+									label={txn.label}
 									handleOnClick={handleOnClick}
 									currentUser={currentUser}
 									canEdit={false}
