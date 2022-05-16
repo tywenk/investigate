@@ -2,6 +2,8 @@ import ConnectWallet from "../components/ConnectWallet"
 import InstallMetaMaskButton from "../components/InstallMetaMaskButton"
 import { useUser } from "../context/UserContext"
 import { useNavigate } from "react-router-dom"
+import { BsGithub } from "react-icons/bs"
+import { Link } from "react-router-dom"
 
 export const Home = () => {
 	const currentUser = useUser()
@@ -28,6 +30,13 @@ export const Home = () => {
 						<>{window.ethereum ? <ConnectWallet /> : <InstallMetaMaskButton />}</>
 					)}
 				</div>
+			</div>
+			<div className='grid justify-items-center mt-3'>
+				<a href={"https://github.com/tywenk/investigate"} target='_blank' rel='noreferrer'>
+					<div className='flex items-center font-mono text-sm text-stone-500 gap-3'>
+						<BsGithub /> Tywen Kelly 2022
+					</div>
+				</a>
 			</div>
 		</div>
 	)
