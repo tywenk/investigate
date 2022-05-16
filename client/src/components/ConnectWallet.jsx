@@ -13,7 +13,7 @@ const ConnectWallet = () => {
 		"bg-stone-500 text-white hover:bg-stone-100 hover:text-black hover:shadow-lg hover:shadow-stone-300 border border-stone-400 hover:border-stone-200 rounded-xl px-2 py-1 mx-1 transition ease-in-out"
 
 	const connectWallet = async () => {
-		const connect = await provider.send("eth_requestAccounts", []).catch(() => 
+		const connect = await provider.send("eth_requestAccounts", []).catch(() => console.log("user rejected request"))
 
 		if (connect) {
 			signInWithEthereum()
@@ -29,7 +29,7 @@ const ConnectWallet = () => {
 			body: JSON.stringify({ address, chainId: "1" }),
 		})
 		const response = await res.json()
-		
+		console.log("HIT create siwe message response", response)
 		const message = new SiweMessage({
 			domain,
 			address,
@@ -64,10 +64,10 @@ const ConnectWallet = () => {
 
 		if (res.ok) {
 			const user = await res.json()
-			
+			console.log("user:", user)
 			handleSetUser(user)
 		} else {
-			
+			console.log(Promise.reject(res))
 		}
 	}
 
