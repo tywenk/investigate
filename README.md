@@ -2,6 +2,8 @@
 
 Create and share notes on Ethereum mainnet blocks and transactions.
 
+Visit the app here: https://eth-investigate.herokuapp.com/
+
 ## How to use Investigate
 
 1. Create a new narrative, and add notes to specific transactions in the block.
