@@ -10,7 +10,7 @@ const BlockTxMore = ({ tx }) => {
 	useEffect(() => {
 		const data = async () => {
 			const txReceipt = await alcProvider.getTransactionReceipt(tx?.hash)
-			console.log(txReceipt)
+
 			setTxInfo(txReceipt)
 		}
 		data()

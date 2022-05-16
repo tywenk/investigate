@@ -22,10 +22,8 @@ export const UserProvider = ({ children }) => {
 			if (r.ok) {
 				r.json().then((user) => {
 					setCurrentUser(user)
-					console.log("auto logged in user:", user)
 				})
 			} else {
-				console.log(r)
 			}
 		})
 	}, [])

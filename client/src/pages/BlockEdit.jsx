@@ -60,7 +60,6 @@ const BlockEdit = ({ isShow = false }) => {
 
 	useEffect(() => {
 		if (Object.keys(currentUser).length > 0 && data) {
-			console.log(data)
 			updateCurrentUser((currUserData) => ({
 				...currUserData,
 				block_narratives: [

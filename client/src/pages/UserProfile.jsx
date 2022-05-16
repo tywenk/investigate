@@ -5,7 +5,6 @@ const UserProfile = () => {
 
 	const getInformation = async () => {
 		const res = await fetch("/profile") //change to /user-profile in users controller later
-		console.log(await res.text())
 	}
 	return (
 		<div>

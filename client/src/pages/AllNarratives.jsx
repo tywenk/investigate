@@ -9,10 +9,9 @@ const AllNarratives = () => {
 	const navigate = useNavigate()
 	const currentUser = useUser()
 
-	// console.log(data)
+	//
 
 	const handleOnClick = (base, narritiveId, hashOrNum, edit = false) => {
-		console.log("click")
 		edit ? navigate(`/${base}/${narritiveId}/${hashOrNum}/edit`) : navigate(`/${base}/${narritiveId}/${hashOrNum}`)
 	}
 

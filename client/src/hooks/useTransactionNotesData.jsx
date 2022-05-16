@@ -14,7 +14,7 @@ const postTxNotes = async ({ txNotes, titleLabel }) => {
 	delete txNotes["investigation"]
 	delete txNotes["txn"]
 
-	// console.log(txNotes)
+	//
 	const res = await fetch("/transaction_narratives/", {
 		method: "POST",
 		headers: {
@@ -29,7 +29,7 @@ const postTxNotes = async ({ txNotes, titleLabel }) => {
 export const useTransactionNotesData = (currentTxNarrativeId, setTxNotes, setTitleLabel) => {
 	return useQuery(["getTxNotes", currentTxNarrativeId], getTxNotes, {
 		onSuccess: (data) => {
-			// console.log(data?.label)
+			//
 			setTitleLabel(data?.label ?? "Untitled")
 			setTxNotes(data)
 		},

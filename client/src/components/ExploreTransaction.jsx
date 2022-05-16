@@ -16,7 +16,6 @@ const ExploreTransaction = ({
 	const userAddress = userInfo ? userInfo.address : txn.user.address
 	const userAddressEns = userInfo ? userInfo.ens || userInfo.address : txn.user.ens || txn.user.address
 
-	console.log(label)
 	const parseTxNoteAttr = (attr) => {
 		switch (attr) {
 			case "note_to":

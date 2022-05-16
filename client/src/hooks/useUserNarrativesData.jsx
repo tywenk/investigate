@@ -21,7 +21,7 @@ export const useUserNarrativesData = (userToQuery) => {
 	const currentUser = userToQuery
 
 	return useQuery(["userNarratives", currentUser], getUserNarratives, {
-		onSuccess: () => console.log("Sucessfull retrieved data for user narratives"),
+		onSuccess: () => 
 	})
 }
 

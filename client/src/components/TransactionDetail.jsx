@@ -10,17 +10,15 @@ const TransactionDetail = ({ tx, canEdit, alcProvider, txNotes, setTxNotes, curr
 	const [iface, setIface] = useState(null)
 	const { data, isSuccess, isLoading } = useEtherscanContractData(tx?.to || tx?.contractAddress, setContractData)
 
-	// console.log(tx?.logs)
-	// console.log(contractData)
+	//
+	//
 
 	useEffect(() => {
 		if (contractData?.result?.[0]?.ABI && contractData?.result?.[0]?.ABI !== "Contract source code not verified") {
 			try {
 				let i = new ethers.utils.Interface(contractData?.result?.[0]?.ABI)
 				setIface(i)
-			} catch {
-				console.log("no interface for logs available")
-			}
+			} catch {}
 		}
 	}, [contractData])
 
@@ -40,8 +38,8 @@ const TransactionDetail = ({ tx, canEdit, alcProvider, txNotes, setTxNotes, curr
 		},
 	]
 
-	// console.log("Contract:", contractData)
-	// console.log("Transaction:", tx)
+	//
+	//
 
 	return (
 		<div className='max-h-screen'>
@@ -106,10 +104,10 @@ const TransactionDetail = ({ tx, canEdit, alcProvider, txNotes, setTxNotes, curr
 						<div className='text-xs font-mono text-stone-500'>Logs</div>
 						{tx?.logs.map((log, index) => {
 							try {
-								// console.log("log:", log)
+								//
 								let event = iface.parseLog(log)
-								// console.log("Event:", event)
-								// event?.args.map((a) => console.log(a))
+								//
+								// event?.args.map((a) =>
 
 								return (
 									<div key={log.logIndex + index} className='bg-primary rounded-md p-2 mt-2 mb-2 grid grid-cols-9'>
@@ -135,7 +133,7 @@ const TransactionDetail = ({ tx, canEdit, alcProvider, txNotes, setTxNotes, curr
 												{event?.eventFragment?.inputs.map((i, index) => {
 													let val = event?.args?.[index]
 													val = typeof val === "string" ? val : val.toString()
-													// console.log(val)
+													//
 
 													return (
 														<div key={i?.name + index} className='truncate'>
@@ -157,7 +155,6 @@ const TransactionDetail = ({ tx, canEdit, alcProvider, txNotes, setTxNotes, curr
 									</div>
 								)
 							} catch {
-								console.log("backup:", log)
 								return (
 									<div key={log.logIndex + index} className='bg-primary rounded-md p-2 mt-2 mb-2 grid grid-cols-9'>
 										<div className='col-span-1 flex align-items-center'>

@@ -19,7 +19,6 @@ const NavBar = () => {
 		if (res.ok) {
 			handleSetUser({})
 		} else {
-			console.log(Promise.reject(res))
 		}
 	}
 
