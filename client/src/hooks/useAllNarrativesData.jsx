@@ -13,6 +13,6 @@ const getAllNarratives = async () => {
 
 export const useAllNarrativesData = () => {
 	return useQuery(["allNarratives"], getAllNarratives, {
-		onSuccess: () => 
+		onSuccess: () => console.log("success"),
 	})
 }
