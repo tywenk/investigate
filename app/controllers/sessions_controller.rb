@@ -29,22 +29,14 @@ class SessionsController < ApplicationController
 	def sign_in
 		message = Siwe::Message.from_json_string session[:message]
 
-		pp message
-		pp params[:signature]
-
 		if message.validate(params.require(:signature))
-			pp 'validated signature'
 			session[:message] = nil
 			session[:ens] = params[:ens]
 			session[:address] = message.address
 
 			user = User.find_or_create_by!(address: message.address)
 
-			pp user
-
 			investigation = Investigation.find_or_create_by!({ user_id: user.id })
-
-			pp investigation
 
 			session[:investigations] = user.investigations.ids
 
