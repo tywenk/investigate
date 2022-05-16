@@ -2,7 +2,6 @@ import ConnectWallet from "../components/ConnectWallet"
 import InstallMetaMaskButton from "../components/InstallMetaMaskButton"
 import { useUser } from "../context/UserContext"
 import { useNavigate } from "react-router-dom"
-import Button from "../components/Button"
 
 export const Home = () => {
 	const currentUser = useUser()

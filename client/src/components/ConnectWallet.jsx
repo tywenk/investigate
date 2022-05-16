@@ -29,6 +29,7 @@ const ConnectWallet = () => {
 			body: JSON.stringify({ address, chainId: "1" }),
 		})
 		const response = await res.json()
+		console.log("HIT create siwe message response", response)
 		const message = new SiweMessage({
 			domain,
 			address,

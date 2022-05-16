@@ -54,7 +54,7 @@ const NavBar = () => {
 							className={({ isActive }) => (isActive ? activeClass : inactiveClass)}
 							to={`/narratives/${currentUser.address}`}
 						>
-							<span className='w-20 truncate'> {currentUser.ens || currentUser.address}</span>
+							<span className='w-10 truncate'> {currentUser.ens || currentUser.address}</span>
 						</NavLink>
 
 						<button onClick={signOut} className={inactiveClass}>

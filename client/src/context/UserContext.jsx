@@ -21,9 +21,11 @@ export const UserProvider = ({ children }) => {
 		fetch("/autologin").then((r) => {
 			if (r.ok) {
 				r.json().then((user) => {
-					handleSetUser(user)
+					setCurrentUser(user)
 					console.log("auto logged in user:", user)
 				})
+			} else {
+				console.log(r)
 			}
 		})
 	}, [])
